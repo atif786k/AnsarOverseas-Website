@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Mail, Phone, MessageCircleMore, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, MessageCircleMore, MapPin, Clock, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { contactFormSchema } from "@/lib/contactValidation";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -20,11 +21,59 @@ export default function ContactPage() {
     orderType: "",
     message: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Handle form submission
+    setIsLoading(true);
+
+    try {
+      // Validate and sanitize form data
+      const validatedData = contactFormSchema.parse({
+        fullName: formData.name,
+        emailAddress: formData.email,
+        companyName: formData.company || "",
+        phoneNumber: formData.phone || "",
+        orderType: formData.orderType,
+        message: formData.message,
+      });
+
+      console.log("Validated data:", validatedData);
+
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(validatedData),
+      });
+
+      const data = await res.json();
+      alert(data.message);
+
+      if (res.ok) {
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          phone: "",
+          orderType: "",
+          message: "",
+        });
+      }
+    } catch (error: any) {
+      console.error("Error submitting form:", error);
+
+      // Handle Zod validation errors
+      if (error.errors) {
+        const errorMessages = error.errors.map((err: any) => err.message).join("\n");
+        alert("Validation Error:\n" + errorMessages);
+      } else {
+        alert("An error occurred while sending your message. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (
@@ -162,9 +211,17 @@ export default function ContactPage() {
                 <Button
                   type="submit"
                   size="lg"
-                  className="font-mono text-sm w-full md:w-auto"
+                  disabled={isLoading}
+                  className="font-mono text-sm w-full md:w-auto cursor-pointer"
                 >
-                  Send Message
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    "Send Message"
+                  )}
                 </Button>
               </form>
             </div>
