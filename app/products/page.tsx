@@ -1,6 +1,21 @@
+import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "Glass Products — Lamp Glass, Candle Holders, Decorative Glass & More",
+  description:
+    "Explore our range of glass products: lamp glass & lighting components, candle holders & votives, decorative glass, drinkware, containers & custom glass manufacturing. Bulk orders welcome.",
+  alternates: {
+    canonical: "/products",
+  },
+  openGraph: {
+    title: "Glass Products — Lamp Glass, Candle Holders, Decorative Glass & Custom Components",
+    description:
+      "Full range of B2B glass products: lighting components, candle holders, decorative glass, drinkware & custom manufacturing from Firozabad, India.",
+  },
+};
 import {
   ArrowRight,
   Lamp,

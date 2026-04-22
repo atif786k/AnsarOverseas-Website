@@ -1,6 +1,21 @@
+import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "About Us — Family-Owned Glass Factory Since Early 2000s",
+  description:
+    "Learn about M/S Ansar Overseas — a family-owned glass manufacturing unit in Firozabad (Glass City of India). 20+ years of experience, 50+ skilled craftsmen, serving exporters & bulk buyers in 25+ countries.",
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "About Ansar Overseas — Glass Manufacturing Heritage from Firozabad",
+    description:
+      "Family-owned glass manufacturing unit in Firozabad, India. 20+ years supplying custom glass to exporters, lighting brands & home decor companies worldwide.",
+  },
+};
 import {
   ArrowRight,
   Award,

@@ -1,6 +1,20 @@
+import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
+import {
+  OrganizationJsonLd,
+  LocalBusinessJsonLd,
+} from "@/components/json-ld";
+
+export const metadata: Metadata = {
+  title: "Ansar Overseas | Custom Glass Manufacturer in Firozabad, India",
+  description:
+    "M/S Ansar Overseas manufactures custom glass products — lamp glass, candle holders, decorative glass, drinkware & more — for exporters, lighting brands & bulk buyers. Based in Firozabad, India. 20+ years experience.",
+  alternates: {
+    canonical: "/",
+  },
+};
 import {
   ArrowRight,
   Factory,
@@ -222,6 +236,8 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen">
+      <OrganizationJsonLd />
+      <LocalBusinessJsonLd />
       <Navigation />
 
       {/* ===== HERO SECTION ===== */}
