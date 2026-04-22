@@ -93,7 +93,7 @@
 }
 
 @theme inline {
-  --font-sans: "Cormorant Garamond", "Geist Fallback", serif;
+  --font-sans: "Poppins", "Geist Fallback", sans-serif;
   --font-mono: "Inter", "Geist Mono Fallback", sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);

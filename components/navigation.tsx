@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Menu, X } from "lucide-react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import Link from "next/link";
+import { Menu, X, MessageCircleMore } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export function Navigation() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
     { href: "/", label: "Home" },
-    { href: "/gallery", label: "Gallery" },
     { href: "/products", label: "Products" },
+    { href: "/gallery", label: "Gallery" },
     { href: "/about", label: "About Us" },
     { href: "/contact", label: "Contact" },
-  ]
+  ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -38,12 +38,29 @@ export function Navigation() {
                 {item.label}
               </Link>
             ))}
-            <Button className="font-mono text-sm">Get Quote</Button>
+            <a
+              href="https://wa.me/917727075499"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button className="font-mono text-sm cursor-pointer" size="sm">
+                <MessageCircleMore className="mr-2 h-4 w-4" />
+                WhatsApp
+              </Button>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2" aria-label="Toggle menu">
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2"
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </button>
         </div>
       </div>
@@ -62,10 +79,21 @@ export function Navigation() {
                 {item.label}
               </Link>
             ))}
-            <Button className="font-mono text-sm w-full">Get Quote</Button>
+            <div className="flex flex-col gap-3 pt-2">
+              <a
+                href="https://wa.me/917727075499"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button className="font-mono text-sm w-full cursor-pointer">
+                  <MessageCircleMore className="mr-2 h-4 w-4" />
+                  WhatsApp Us
+                </Button>
+              </a>
+            </div>
           </div>
         </div>
       )}
     </nav>
-  )
+  );
 }

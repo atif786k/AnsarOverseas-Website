@@ -1,10 +1,10 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Cormorant_Garamond, Inter } from "next/font/google"
+import { Poppins, Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 
-const cormorantGaramond = Cormorant_Garamond({
+const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-sans",
@@ -16,12 +16,11 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Ansar Overseas | Premium Glass Manufacturing",
+  title: "Ansar Overseas | Custom Glass Manufacturing — Firozabad, India",
   description:
-    "Ansar Overseas - Family-owned glass manufacturing business specializing in handmade and machine-made glass artifacts, drinking glasses, bottles, jars, and custom glass products for vendors worldwide.",
-  generator: "v0.app",
+    "M/S Ansar Overseas — Custom glass manufacturer in Firozabad, India. We supply lamp glass, candle holders, decorative glass, drinkware & custom glass components to exporters, lighting brands & bulk buyers worldwide. 20+ years experience.",
   keywords:
-    "glass manufacturing, handmade glass, custom glass products, glass artifacts, drinking glasses, glass bottles, glass jars, bulk glass orders, Ansar Overseas",
+    "glass manufacturer India, custom glass manufacturing, lamp glass supplier, candle holder manufacturer, decorative glass Firozabad, glass exporter India, bulk glass orders, lighting glass components, chandelier glass parts, handicraft glass supplier, glass factory Firozabad, B2B glass supplier, Ansar Overseas",
   icons: {
     icon: [
       {
@@ -39,6 +38,14 @@ export const metadata: Metadata = {
     ],
     apple: "/apple-icon.png",
   },
+  openGraph: {
+    title: "Ansar Overseas | Custom Glass Manufacturing — Firozabad, India",
+    description:
+      "Custom glass manufacturer supplying lamp glass, candle holders, decorative glass & drinkware to exporters and bulk buyers worldwide.",
+    type: "website",
+    locale: "en_IN",
+    siteName: "Ansar Overseas",
+  },
 }
 
 export default function RootLayout({
@@ -48,7 +55,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${cormorantGaramond.variable} ${inter.variable} font-sans antialiased`}>
+      <body className={`${poppins.variable} ${inter.variable} font-sans antialiased`}>
         {children}
         <Analytics />
       </body>
