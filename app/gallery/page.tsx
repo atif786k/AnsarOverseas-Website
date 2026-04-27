@@ -4,73 +4,110 @@ import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MessageCircleMore } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+
+interface DynamicImage {
+  url: string;
+  name: string;
+  category?: string;
+  description?: string;
+}
+
+const staticGalleryItems = [
+  {
+    name: "Molten Glass Crafting",
+    category: "Manufacturing Process",
+    description: "Skilled artisan shaping molten glass using traditional techniques",
+    image: "/artisan-glassblowing-in-factory-with-molten-glass.jpg",
+  },
+  {
+    name: "Premium Finished Products",
+    category: "Finished Goods",
+    description: "Export-grade glass products ready for dispatch",
+    image: "/finished-glass-products-premium-quality.jpg",
+  },
+  {
+    name: "Production Line",
+    category: "Bulk Manufacturing",
+    description: "Our factory floor handling large-scale production runs",
+    image: "/glass-manufacturing-factory-production-line-bulk-o.jpg",
+  },
+  {
+    name: "Master Glassblower",
+    category: "Craftsmanship",
+    description: "Experienced artisan with decades of glass-making expertise",
+    image: "/experienced-glassblower-artisan-at-work.jpg",
+  },
+  {
+    name: "Quality Inspection",
+    category: "Quality Control",
+    description: "Rigorous quality checks ensuring export-grade standards",
+    image: "/glass-quality-inspection-microscope.jpg",
+  },
+  {
+    name: "Glass Furnace",
+    category: "Manufacturing Process",
+    description: "High-temperature glass melting furnace in operation",
+    image: "/glass-manufacturing-molten-glass-furnace.jpg",
+  },
+  {
+    name: "Annealing Process",
+    category: "Manufacturing Process",
+    description: "Controlled cooling process for strength and durability",
+    image: "/glass-cooling-annealing-process.jpg",
+  },
+  {
+    name: "Final Inspection",
+    category: "Quality Control",
+    description: "Each product inspected before packaging and dispatch",
+    image: "/finished-glass-products-quality-inspection.jpg",
+  },
+  {
+    name: "Team at Work",
+    category: "Our Team",
+    description: "50+ skilled workers collaborating on the factory floor",
+    image: "/glass-factory-team-working-together.jpg",
+  },
+  {
+    name: "Workshop Heritage",
+    category: "Our Facility",
+    description: "Our family-owned workshop carrying forward Firozabad's glass legacy",
+    image: "/family-owned-glass-factory-workshop-heritage.jpg",
+  },
+];
 
 export default function GalleryPage() {
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
+  const [dynamicImages, setDynamicImages] = useState<DynamicImage[]>([]);
 
+  useEffect(() => {
+    fetch("/api/gallery/list")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.images && data.images.length > 0) {
+          setDynamicImages(
+            data.images.map((img: { url: string; name: string }) => ({
+              url: img.url,
+              name: img.name,
+              category: "Gallery",
+              description: "",
+            }))
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Dynamic images first, then static fallback
   const galleryItems = [
-    {
-      name: "Molten Glass Crafting",
-      category: "Manufacturing Process",
-      description: "Skilled artisan shaping molten glass using traditional techniques",
-      image: "/artisan-glassblowing-in-factory-with-molten-glass.jpg",
-    },
-    {
-      name: "Premium Finished Products",
-      category: "Finished Goods",
-      description: "Export-grade glass products ready for dispatch",
-      image: "/finished-glass-products-premium-quality.jpg",
-    },
-    {
-      name: "Production Line",
-      category: "Bulk Manufacturing",
-      description: "Our factory floor handling large-scale production runs",
-      image: "/glass-manufacturing-factory-production-line-bulk-o.jpg",
-    },
-    {
-      name: "Master Glassblower",
-      category: "Craftsmanship",
-      description: "Experienced artisan with decades of glass-making expertise",
-      image: "/experienced-glassblower-artisan-at-work.jpg",
-    },
-    {
-      name: "Quality Inspection",
-      category: "Quality Control",
-      description: "Rigorous quality checks ensuring export-grade standards",
-      image: "/glass-quality-inspection-microscope.jpg",
-    },
-    {
-      name: "Glass Furnace",
-      category: "Manufacturing Process",
-      description: "High-temperature glass melting furnace in operation",
-      image: "/glass-manufacturing-molten-glass-furnace.jpg",
-    },
-    {
-      name: "Annealing Process",
-      category: "Manufacturing Process",
-      description: "Controlled cooling process for strength and durability",
-      image: "/glass-cooling-annealing-process.jpg",
-    },
-    {
-      name: "Final Inspection",
-      category: "Quality Control",
-      description: "Each product inspected before packaging and dispatch",
-      image: "/finished-glass-products-quality-inspection.jpg",
-    },
-    {
-      name: "Team at Work",
-      category: "Our Team",
-      description: "50+ skilled workers collaborating on the factory floor",
-      image: "/glass-factory-team-working-together.jpg",
-    },
-    {
-      name: "Workshop Heritage",
-      category: "Our Facility",
-      description: "Our family-owned workshop carrying forward Firozabad's glass legacy",
-      image: "/family-owned-glass-factory-workshop-heritage.jpg",
-    },
+    ...dynamicImages.map((img) => ({
+      name: img.name,
+      category: img.category || "Gallery",
+      description: img.description || "",
+      image: img.url,
+    })),
+    ...staticGalleryItems,
   ];
 
   return (
