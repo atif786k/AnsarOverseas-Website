@@ -21,10 +21,7 @@ import {
   Users,
   Award,
   Globe,
-  Lightbulb,
   Flame,
-  GlassWater,
-  Gem,
   Boxes,
   Clock,
   BadgeCheck,
@@ -32,12 +29,7 @@ import {
   Truck,
   Handshake,
   Lamp,
-  PaintBucket,
-  Store,
-  ClipboardList,
-  FlaskConical,
   Settings,
-  PackageCheck,
   MessageCircleMore,
   Phone,
 } from "lucide-react";
@@ -69,36 +61,12 @@ export default function HomePage() {
       image: "/artisan-glassblowing-in-factory-with-molten-glass.jpg",
     },
     {
-      icon: Gem,
-      title: "Decorative Glass",
-      description:
-        "Glass components for metal handicrafts, lanterns, terrariums, and home decor accents crafted to complement your designs.",
-      useCases: "Handicraft exporters, interior designers, decor brands",
-      image: "/finished-glass-products-premium-quality.jpg",
-    },
-    {
-      icon: GlassWater,
-      title: "Drinkware & Containers",
-      description:
-        "Beverage glasses, bottles, mugs, mason jars, storage containers, and oil & vinegar bottles for everyday and premium use.",
-      useCases: "HORECA, retail brands, wholesale distributors",
-      image: "/finished-glass-products-quality-inspection.jpg",
-    },
-    {
       icon: Settings,
       title: "Custom Glass Components",
       description:
         "Bespoke glass parts manufactured to your exact specifications — shapes, sizes, thickness, and finishes tailored to your product line.",
       useCases: "OEM manufacturers, product designers, export houses",
       image: "/glass-quality-inspection-microscope.jpg",
-    },
-    {
-      icon: Boxes,
-      title: "Bulk Production",
-      description:
-        "High-volume manufacturing with consistent quality across large batches. Scalable production capacity for ongoing supply partnerships.",
-      useCases: "Wholesale buyers, chain retailers, export orders",
-      image: "/glass-manufacturing-factory-production-line-bulk-o.jpg",
     },
   ];
 
@@ -141,64 +109,6 @@ export default function HomePage() {
     },
   ];
 
-  const clientTypes = [
-    {
-      icon: Globe,
-      title: "Export Houses",
-      description:
-        "Supplying export-grade glass components to trading companies shipping to Europe, USA, Middle East & beyond.",
-    },
-    {
-      icon: Lightbulb,
-      title: "Lighting Manufacturers",
-      description:
-        "Custom lamp glass, chandelier parts, and diffusers for lighting brands and OEM producers.",
-    },
-    {
-      icon: PaintBucket,
-      title: "Interior Designers",
-      description:
-        "Bespoke glass pieces for residential and commercial interior design projects.",
-    },
-    {
-      icon: Store,
-      title: "Home Decor Brands",
-      description:
-        "Decorative glassware, candle holders, and accent pieces for retail and D2C brands.",
-    },
-  ];
-
-  const processSteps = [
-    {
-      icon: ClipboardList,
-      step: "01",
-      title: "Requirement Discussion",
-      description:
-        "Share your specifications, designs, and quantities. We'll understand your exact needs.",
-    },
-    {
-      icon: FlaskConical,
-      step: "02",
-      title: "Sample Development",
-      description:
-        "We create prototypes for your approval — iterate until you're fully satisfied.",
-    },
-    {
-      icon: Factory,
-      step: "03",
-      title: "Production",
-      description:
-        "Full-scale manufacturing with rigorous quality checks at every stage.",
-    },
-    {
-      icon: PackageCheck,
-      step: "04",
-      title: "Delivery",
-      description:
-        "Careful packaging and timely dispatch — domestically or for export.",
-    },
-  ];
-
   const galleryImages = [
     {
       src: "/artisan-glassblowing-in-factory-with-molten-glass.jpg",
@@ -219,18 +129,6 @@ export default function HomePage() {
     {
       src: "/glass-quality-inspection-microscope.jpg",
       alt: "Quality inspection of glass products",
-    },
-    {
-      src: "/glass-manufacturing-molten-glass-furnace.jpg",
-      alt: "Molten glass furnace in operation",
-    },
-    {
-      src: "/glass-cooling-annealing-process.jpg",
-      alt: "Glass cooling and annealing process",
-    },
-    {
-      src: "/finished-glass-products-quality-inspection.jpg",
-      alt: "Finished products quality inspection",
     },
   ];
 
@@ -494,90 +392,6 @@ export default function HomePage() {
                       {item.description}
                     </p>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== CLIENT TYPES SECTION ===== */}
-      <section className="py-20 lg:py-32 bg-primary text-primary-foreground">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <div className="inline-block border border-accent/40 px-4 py-1.5 mb-6">
-              <span className="text-xs font-mono tracking-widest text-accent uppercase">
-                Who We Work With
-              </span>
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-light mb-6 text-balance">
-              Trusted by businesses across industries
-            </h2>
-            <p className="text-lg font-mono text-primary-foreground/70 leading-relaxed">
-              We work with a diverse range of businesses — from export houses
-              shipping worldwide to local lighting manufacturers and decor
-              brands.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {clientTypes.map((client, index) => {
-              const Icon = client.icon;
-              return (
-                <div
-                  key={index}
-                  className="border border-primary-foreground/20 p-8 space-y-4 hover:border-accent/60 transition-colors text-center"
-                >
-                  <Icon className="h-10 w-10 text-accent mx-auto" />
-                  <h3 className="text-xl font-normal">{client.title}</h3>
-                  <p className="text-sm font-mono text-primary-foreground/70 leading-relaxed">
-                    {client.description}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== PROCESS SECTION ===== */}
-      <section className="py-20 lg:py-32">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <div className="inline-block border border-accent/40 px-4 py-1.5 mb-6">
-              <span className="text-xs font-mono tracking-widest text-accent uppercase">
-                How We Work
-              </span>
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-light mb-6 text-balance">
-              From your idea to delivered product
-            </h2>
-            <p className="text-lg font-mono text-muted-foreground leading-relaxed">
-              Our streamlined process ensures quality at every step — from
-              initial discussion to final delivery.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {processSteps.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <div key={index} className="relative text-center space-y-4">
-                  <div className="text-6xl font-light text-accent/20">
-                    {item.step}
-                  </div>
-                  <div className="h-14 w-14 bg-accent/10 mx-auto flex items-center justify-center">
-                    <Icon className="h-7 w-7 text-accent" />
-                  </div>
-                  <h3 className="text-xl font-normal">{item.title}</h3>
-                  <p className="text-sm font-mono text-muted-foreground leading-relaxed">
-                    {item.description}
-                  </p>
-                  {index < processSteps.length - 1 && (
-                    <div className="hidden lg:block absolute top-16 -right-4 w-8">
-                      <ArrowRight className="h-5 w-5 text-accent/30" />
-                    </div>
-                  )}
                 </div>
               );
             })}
