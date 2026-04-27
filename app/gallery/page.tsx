@@ -4,7 +4,7 @@ import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MessageCircleMore } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 
 interface DynamicImage {
@@ -77,9 +77,13 @@ const staticGalleryItems = [
   },
 ];
 
+const ITEMS_PER_PAGE = 15;
+
 export default function GalleryPage() {
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
   const [dynamicImages, setDynamicImages] = useState<DynamicImage[]>([]);
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+  const loaderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/api/gallery/list")
@@ -110,6 +114,29 @@ export default function GalleryPage() {
     ...staticGalleryItems,
   ];
 
+  const hasMore = visibleCount < galleryItems.length;
+
+  // Infinite scroll observer
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+      if (entry.isIntersecting && hasMore) {
+        setVisibleCount((prev) => Math.min(prev + ITEMS_PER_PAGE, galleryItems.length));
+      }
+    },
+    [hasMore, galleryItems.length]
+  );
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, {
+      rootMargin: "200px",
+    });
+    if (loaderRef.current) observer.observe(loaderRef.current);
+    return () => observer.disconnect();
+  }, [handleObserver]);
+
+  const visibleItems = galleryItems.slice(0, visibleCount);
+
   return (
     <div className="min-h-screen">
       <Navigation />
@@ -139,7 +166,7 @@ export default function GalleryPage() {
       <section className="pb-20 lg:pb-32">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {galleryItems.map((item, index) => (
+            {visibleItems.map((item, index) => (
               <div
                 key={index}
                 className={`group relative overflow-hidden bg-muted cursor-pointer ${
@@ -153,6 +180,7 @@ export default function GalleryPage() {
                 <img
                   src={item.image}
                   alt={item.name}
+                  loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
 
@@ -178,6 +206,13 @@ export default function GalleryPage() {
               </div>
             ))}
           </div>
+
+          {/* Infinite scroll trigger */}
+          {hasMore && (
+            <div ref={loaderRef} className="flex justify-center py-12">
+              <div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-foreground rounded-full animate-spin" />
+            </div>
+          )}
         </div>
       </section>
 
