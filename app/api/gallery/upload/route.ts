@@ -27,10 +27,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Max 10MB
-    if (file.size > 10 * 1024 * 1024) {
+    // Max 1MB
+    if (file.size > 1 * 1024 * 1024) {
       return NextResponse.json(
-        { error: "File too large. Maximum 10MB." },
+        { error: "File too large. Maximum 1MB." },
         { status: 400 }
       );
     }

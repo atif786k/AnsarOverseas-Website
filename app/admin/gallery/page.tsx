@@ -241,7 +241,7 @@ export default function AdminGalleryPage() {
             Drag & drop images here, or click to browse
           </p>
           <p className="text-sm text-muted-foreground">
-            JPEG, PNG, WebP — max 10MB each — auto-resized to 1200px width
+            JPEG, PNG, WebP — max 1MB each — auto-resized to 1200px width
           </p>
           <input
             ref={fileInputRef}
