@@ -62,10 +62,11 @@ export async function POST(request: NextRequest) {
       description,
       uploadedAt: new Date().toISOString(),
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Upload error:", error);
+    const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-      { error: "Upload failed. Please try again." },
+      { error: `Upload failed: ${message}` },
       { status: 500 }
     );
   }
