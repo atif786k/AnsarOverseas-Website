@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { Upload, Trash2, Lock, ImagePlus, Loader2, X } from "lucide-react";
+import { Upload, Trash2, Lock, ImagePlus, Loader2, X, Eye, EyeOff } from "lucide-react";
 
 interface UploadedImage {
   url: string;
@@ -21,6 +21,7 @@ interface PendingUpload {
 
 export default function AdminGalleryPage() {
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [authError, setAuthError] = useState("");
   const [images, setImages] = useState<UploadedImage[]>([]);
@@ -191,14 +192,23 @@ export default function AdminGalleryPage() {
           </div>
 
           <div className="space-y-4">
-            <input
-              type="password"
-              placeholder="Enter admin password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleLogin()}
-              className="w-full px-4 py-3 border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-foreground"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter admin password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+                className="w-full px-4 py-3 pr-12 border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-foreground"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
 
             {authError && (
               <p className="text-sm text-red-600">{authError}</p>
