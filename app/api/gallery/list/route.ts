@@ -1,32 +1,55 @@
-import { list, head } from "@vercel/blob";
+import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
     const { blobs } = await list({ prefix: "gallery/" });
 
+    // Separate image files and metadata JSON files
+    const imageBlobs = blobs.filter((b) => b.pathname.endsWith(".jpg"));
+    const metaBlobs = blobs.filter((b) => b.pathname.endsWith(".json"));
+
+    // Build a map of metadata: base filename -> metadata URL
+    const metaMap = new Map<string, string>();
+    for (const meta of metaBlobs) {
+      const base = meta.pathname.replace(/\.json$/, "");
+      metaMap.set(base, meta.url);
+    }
+
     const images = await Promise.all(
-      blobs.map(async (blob) => {
-        // Get full blob details including custom metadata
-        let metadata: Record<string, string> = {};
-        try {
-          const details = await head(blob.url);
-          metadata = (details as { customMetadata?: Record<string, string> }).customMetadata || {};
-        } catch {
-          // fallback to parsing from pathname
+      imageBlobs.map(async (blob) => {
+        const base = blob.pathname.replace(/\.jpg$/, "");
+        const metaUrl = metaMap.get(base);
+
+        let name = "";
+        let category = "Gallery";
+        let description = "";
+
+        if (metaUrl) {
+          try {
+            const res = await fetch(metaUrl);
+            const meta = await res.json();
+            name = meta.name || "";
+            category = meta.category || "Gallery";
+            description = meta.description || "";
+          } catch {
+            // fallback below
+          }
         }
 
         // Fallback name from pathname if no metadata
-        const filename = blob.pathname.replace("gallery/", "");
-        const namepart = filename.replace(/^\d+_/, "").replace(/\.jpg$/, "");
-        const fallbackName = namepart.replace(/-/g, " ");
+        if (!name) {
+          const filename = blob.pathname.replace("gallery/", "");
+          const namepart = filename.replace(/^\d+_/, "").replace(/\.jpg$/, "");
+          name = namepart.replace(/-/g, " ");
+        }
 
         return {
           url: blob.url,
           pathname: blob.pathname,
-          name: metadata.name || fallbackName,
-          category: metadata.category || "Gallery",
-          description: metadata.description || "",
+          name,
+          category,
+          description,
           uploadedAt: blob.uploadedAt,
           size: blob.size,
         };

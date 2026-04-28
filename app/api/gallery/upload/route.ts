@@ -53,17 +53,21 @@ export async function POST(request: NextRequest) {
     // Create a filename with metadata encoded in the path
     const timestamp = Date.now();
     const safeName = name.replace(/[^a-zA-Z0-9-_ ]/g, "").replace(/\s+/g, "-");
-    const filename = `gallery/${timestamp}_${safeName}.jpg`;
+    const baseFilename = `gallery/${timestamp}_${safeName}`;
 
-    const blob = await put(filename, resizedBuffer, {
+    // Upload image
+    const blob = await put(`${baseFilename}.jpg`, resizedBuffer, {
       access: "public",
       contentType: "image/jpeg",
       addRandomSuffix: false,
-      customMetadata: {
-        name,
-        category,
-        description,
-      },
+    });
+
+    // Upload metadata JSON alongside the image
+    const metadata = JSON.stringify({ name, category, description });
+    await put(`${baseFilename}.json`, metadata, {
+      access: "public",
+      contentType: "application/json",
+      addRandomSuffix: false,
     });
 
     return NextResponse.json({

@@ -19,7 +19,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    await del(urls);
+    // Also delete the corresponding metadata JSON files
+    const allUrls = urls.flatMap((url) => {
+      const jsonUrl = url.replace(/\.jpg$/, ".json");
+      return [url, jsonUrl];
+    });
+
+    await del(allUrls);
 
     return NextResponse.json({ success: true, deleted: urls.length });
   } catch (error) {
