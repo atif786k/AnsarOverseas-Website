@@ -33,6 +33,7 @@ export default function AdminGalleryPage() {
   const [loading, setLoading] = useState(false);
   const [selectedUrls, setSelectedUrls] = useState<Set<string>>(new Set());
   const [bulkDeleting, setBulkDeleting] = useState(false);
+  const [uploadErrors, setUploadErrors] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const storedPassword = useRef("");
@@ -86,7 +87,8 @@ export default function AdminGalleryPage() {
     const newPending: PendingUpload[] = [];
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      if (!file.type.startsWith("image/")) continue;
+      const isImage = file.type.startsWith("image/") || file.name.toLowerCase().endsWith(".heic") || file.name.toLowerCase().endsWith(".heif");
+      if (!isImage) continue;
 
       const nameFromFile = file.name
         .replace(/\.[^.]+$/, "")
@@ -129,6 +131,8 @@ export default function AdminGalleryPage() {
   const handleUploadAll = async () => {
     if (pendingUploads.length === 0) return;
     setUploading(true);
+    setUploadErrors([]);
+    const errors: string[] = [];
 
     for (const item of pendingUploads) {
       const formData = new FormData();
@@ -138,19 +142,25 @@ export default function AdminGalleryPage() {
       formData.append("description", item.description);
 
       try {
-        await fetch("/api/gallery/upload", {
+        const res = await fetch("/api/gallery/upload", {
           method: "POST",
           headers: { "x-admin-password": storedPassword.current },
           body: formData,
         });
+
+        if (!res.ok) {
+          const data = await res.json();
+          errors.push(`"${item.name}": ${data.error || `Failed (${res.status})`}`);
+        }
       } catch {
-        // continue with next
+        errors.push(`"${item.name}": Network error. Check your connection.`);
       }
     }
 
     pendingUploads.forEach((p) => URL.revokeObjectURL(p.preview));
     setPendingUploads([]);
     setUploading(false);
+    setUploadErrors(errors);
     await fetchImages();
   };
 
@@ -159,7 +169,7 @@ export default function AdminGalleryPage() {
 
     setDeleting(url);
     try {
-      await fetch("/api/gallery/delete", {
+      const res = await fetch("/api/gallery/delete", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -167,9 +177,15 @@ export default function AdminGalleryPage() {
         },
         body: JSON.stringify({ urls: [url] }),
       });
-      await fetchImages();
+
+      if (!res.ok) {
+        const data = await res.json();
+        alert(`Delete failed: ${data.error || "Unknown error"}`);
+      } else {
+        await fetchImages();
+      }
     } catch {
-      // silent fail
+      alert("Delete failed: Network error. Check your connection.");
     }
     setDeleting(null);
   };
@@ -180,7 +196,7 @@ export default function AdminGalleryPage() {
 
     setBulkDeleting(true);
     try {
-      await fetch("/api/gallery/delete", {
+      const res = await fetch("/api/gallery/delete", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -188,9 +204,15 @@ export default function AdminGalleryPage() {
         },
         body: JSON.stringify({ urls: Array.from(selectedUrls) }),
       });
-      await fetchImages();
+
+      if (!res.ok) {
+        const data = await res.json();
+        alert(`Delete failed: ${data.error || "Unknown error"}`);
+      } else {
+        await fetchImages();
+      }
     } catch {
-      // silent fail
+      alert("Delete failed: Network error. Check your connection.");
     }
     setBulkDeleting(false);
   };
@@ -291,20 +313,42 @@ export default function AdminGalleryPage() {
         >
           <ImagePlus className="w-10 h-10 mx-auto mb-3 text-muted-foreground" />
           <p className="text-muted-foreground mb-1">
-            Drag & drop images here, or click to browse
+            Tap to select images or drag & drop
           </p>
           <p className="text-sm text-muted-foreground">
-            JPEG, PNG, WebP — max 1MB each — auto-resized to 1200px width
+            JPEG, PNG, WebP, HEIC — auto-compressed to optimal size
           </p>
           <input
             ref={fileInputRef}
             type="file"
             multiple
-            accept="image/*"
+            accept="image/*,.heic,.heif"
             className="hidden"
             onChange={(e) => handleFilesSelected(e.target.files)}
           />
         </div>
+
+        {/* Upload Errors */}
+        {uploadErrors.length > 0 && (
+          <div className="mb-8 border border-red-300 bg-red-50 p-4">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm font-medium text-red-800">
+                {uploadErrors.length} upload{uploadErrors.length > 1 ? "s" : ""} failed
+              </p>
+              <button
+                onClick={() => setUploadErrors([])}
+                className="text-red-600 hover:text-red-800"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <ul className="space-y-1">
+              {uploadErrors.map((err, i) => (
+                <li key={i} className="text-sm text-red-700">{err}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {/* Pending Uploads */}
         {pendingUploads.length > 0 && (

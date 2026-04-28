@@ -20,17 +20,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    if (!file.type.startsWith("image/")) {
+    const isImage =
+      file.type.startsWith("image/") ||
+      file.name.toLowerCase().endsWith(".heic") ||
+      file.name.toLowerCase().endsWith(".heif");
+
+    if (!isImage) {
       return NextResponse.json(
         { error: "File must be an image" },
         { status: 400 }
       );
     }
 
-    // Max 1MB
-    if (file.size > 1 * 1024 * 1024) {
+    // Max 10MB input (raw camera photos can be large, sharp will compress)
+    if (file.size > 10 * 1024 * 1024) {
       return NextResponse.json(
-        { error: "File too large. Maximum 1MB." },
+        { error: "File too large. Maximum 10MB." },
         { status: 400 }
       );
     }
@@ -38,7 +43,9 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
 
     // Resize: max 1200px width, maintain aspect ratio, JPEG 80% quality
+    // This compresses large camera photos (3-10MB) down to ~100-300KB
     const resizedBuffer = await sharp(buffer)
+      .rotate() // auto-rotate based on EXIF orientation (important for mobile photos)
       .resize(1200, null, { withoutEnlargement: true })
       .jpeg({ quality: 80 })
       .toBuffer();
