@@ -9,18 +9,19 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { url } = await request.json();
+    const body = await request.json();
+    const urls: string[] = body.urls || (body.url ? [body.url] : []);
 
-    if (!url) {
+    if (urls.length === 0) {
       return NextResponse.json(
-        { error: "No URL provided" },
+        { error: "No URLs provided" },
         { status: 400 }
       );
     }
 
-    await del(url);
+    await del(urls);
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, deleted: urls.length });
   } catch (error) {
     console.error("Delete error:", error);
     return NextResponse.json(

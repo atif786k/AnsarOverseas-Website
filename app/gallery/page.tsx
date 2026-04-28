@@ -29,11 +29,11 @@ export default function GalleryPage() {
       .then((data) => {
         if (data.images && data.images.length > 0) {
           setGalleryItems(
-            data.images.map((img: { url: string; name: string }) => ({
+            data.images.map((img: { url: string; name: string; category?: string; description?: string }) => ({
               url: img.url,
               name: img.name,
-              category: "Gallery",
-              description: "",
+              category: img.category || "Gallery",
+              description: img.description || "",
             }))
           );
         }

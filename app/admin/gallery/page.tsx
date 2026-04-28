@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { Upload, Trash2, Lock, ImagePlus, Loader2, X, Eye, EyeOff } from "lucide-react";
+import { Upload, Trash2, Lock, ImagePlus, Loader2, X, Eye, EyeOff, CheckSquare, Square } from "lucide-react";
 
 interface UploadedImage {
   url: string;
   pathname: string;
   name: string;
+  category: string;
+  description: string;
   uploadedAt: string;
   size: number;
 }
@@ -29,6 +31,8 @@ export default function AdminGalleryPage() {
   const [uploading, setUploading] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [selectedUrls, setSelectedUrls] = useState<Set<string>>(new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const storedPassword = useRef("");
@@ -43,12 +47,10 @@ export default function AdminGalleryPage() {
       });
       const data = await res.json();
 
-      // Verify password by trying a harmless operation
-      // We'll just check if the password is accepted by the upload endpoint
       const testRes = await fetch("/api/gallery/upload", {
         method: "POST",
         headers: { "x-admin-password": password },
-        body: new FormData(), // empty form, will get 400 but not 401
+        body: new FormData(),
       });
 
       if (testRes.status === 401) {
@@ -72,6 +74,7 @@ export default function AdminGalleryPage() {
       const res = await fetch("/api/gallery/list");
       const data = await res.json();
       setImages(data.images || []);
+      setSelectedUrls(new Set());
     } catch {
       // silent fail
     }
@@ -145,7 +148,6 @@ export default function AdminGalleryPage() {
       }
     }
 
-    // Clean up previews
     pendingUploads.forEach((p) => URL.revokeObjectURL(p.preview));
     setPendingUploads([]);
     setUploading(false);
@@ -163,13 +165,54 @@ export default function AdminGalleryPage() {
           "Content-Type": "application/json",
           "x-admin-password": storedPassword.current,
         },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ urls: [url] }),
       });
       await fetchImages();
     } catch {
       // silent fail
     }
     setDeleting(null);
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedUrls.size === 0) return;
+    if (!confirm(`Delete ${selectedUrls.size} selected image${selectedUrls.size > 1 ? "s" : ""}? This cannot be undone.`)) return;
+
+    setBulkDeleting(true);
+    try {
+      await fetch("/api/gallery/delete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": storedPassword.current,
+        },
+        body: JSON.stringify({ urls: Array.from(selectedUrls) }),
+      });
+      await fetchImages();
+    } catch {
+      // silent fail
+    }
+    setBulkDeleting(false);
+  };
+
+  const toggleSelect = (url: string) => {
+    setSelectedUrls((prev) => {
+      const next = new Set(prev);
+      if (next.has(url)) {
+        next.delete(url);
+      } else {
+        next.add(url);
+      }
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedUrls.size === images.length) {
+      setSelectedUrls(new Set());
+    } else {
+      setSelectedUrls(new Set(images.map((img) => img.url)));
+    }
   };
 
   const onDrop = useCallback((e: React.DragEvent) => {
@@ -336,7 +379,38 @@ export default function AdminGalleryPage() {
 
         {/* Existing Images */}
         <div>
-          <h2 className="text-lg font-medium mb-4">Uploaded Images</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-medium">Uploaded Images</h2>
+            {images.length > 0 && (
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={toggleSelectAll}
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {selectedUrls.size === images.length ? (
+                    <CheckSquare className="w-4 h-4" />
+                  ) : (
+                    <Square className="w-4 h-4" />
+                  )}
+                  {selectedUrls.size === images.length ? "Deselect All" : "Select All"}
+                </button>
+                {selectedUrls.size > 0 && (
+                  <button
+                    onClick={handleBulkDelete}
+                    disabled={bulkDeleting}
+                    className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
+                  >
+                    {bulkDeleting ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Trash2 className="w-3.5 h-3.5" />
+                    )}
+                    Delete {selectedUrls.size} selected
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
 
           {images.length === 0 ? (
             <p className="text-muted-foreground text-center py-12">
@@ -345,7 +419,26 @@ export default function AdminGalleryPage() {
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {images.map((img) => (
-                <div key={img.url} className="group relative border border-border">
+                <div
+                  key={img.url}
+                  className={`group relative border transition-colors ${
+                    selectedUrls.has(img.url)
+                      ? "border-foreground ring-2 ring-foreground/20"
+                      : "border-border"
+                  }`}
+                >
+                  {/* Selection checkbox */}
+                  <button
+                    onClick={() => toggleSelect(img.url)}
+                    className="absolute top-2 left-2 z-10 p-1 bg-white/80 hover:bg-white transition-colors"
+                  >
+                    {selectedUrls.has(img.url) ? (
+                      <CheckSquare className="w-4 h-4 text-foreground" />
+                    ) : (
+                      <Square className="w-4 h-4 text-muted-foreground" />
+                    )}
+                  </button>
+
                   <img
                     src={img.url}
                     alt={img.name}
@@ -353,7 +446,11 @@ export default function AdminGalleryPage() {
                   />
                   <div className="p-2">
                     <p className="text-sm font-medium truncate">{img.name}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-accent truncate">{img.category}</p>
+                    {img.description && (
+                      <p className="text-xs text-muted-foreground truncate">{img.description}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground mt-1">
                       {new Date(img.uploadedAt).toLocaleDateString()}
                     </p>
                   </div>

@@ -52,6 +52,11 @@ export async function POST(request: NextRequest) {
       access: "public",
       contentType: "image/jpeg",
       addRandomSuffix: false,
+      customMetadata: {
+        name,
+        category,
+        description,
+      },
     });
 
     return NextResponse.json({
