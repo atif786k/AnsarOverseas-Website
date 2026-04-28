@@ -184,12 +184,28 @@ export default function HomePage() {
                 </a>
               </div>
             </div>
-            <div className="relative aspect-[4/3] lg:aspect-square overflow-hidden">
-              <img
-                src="/artisan-glassblowing-in-factory-with-molten-glass.jpg"
-                alt="Master artisan crafting glass at Ansar Overseas factory in Firozabad"
-                className="w-full h-full object-cover"
-              />
+            <div className="relative grid grid-cols-5 grid-rows-2 gap-1.5 aspect-[4/3] lg:aspect-square overflow-hidden rounded-sm">
+              <div className="col-span-3 row-span-2 overflow-hidden">
+                <img
+                  src="/factory-hero-molten-glass.jpg"
+                  alt="Craftsman holding molten glass at Ansar Overseas factory in Firozabad"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="col-span-2 overflow-hidden">
+                <img
+                  src="/factory-hero-craftsmen.jpg"
+                  alt="Glass factory craftsmen working with molten glass on rods"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="col-span-2 overflow-hidden">
+                <img
+                  src="/factory-hero-furnace.jpg"
+                  alt="Artisans working near glass furnace with warm glow"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-primary/80 to-transparent p-6">
                 <p className="text-sm font-mono text-primary-foreground/90">
                   Our craftsmen at work — Firozabad, Glass City of India
