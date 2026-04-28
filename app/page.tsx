@@ -34,6 +34,7 @@ import {
   Phone,
 } from "lucide-react";
 import Link from "next/link";
+import { HomeGallery } from "@/components/home-gallery";
 
 export default function HomePage() {
   const stats = [
@@ -106,29 +107,6 @@ export default function HomePage() {
       title: "Long-Term Partnerships",
       description:
         "We believe in building trust — many of our clients have been with us for over a decade.",
-    },
-  ];
-
-  const galleryImages = [
-    {
-      src: "/artisan-glassblowing-in-factory-with-molten-glass.jpg",
-      alt: "Artisan glassblowing with molten glass",
-    },
-    {
-      src: "/finished-glass-products-premium-quality.jpg",
-      alt: "Premium quality finished glass products",
-    },
-    {
-      src: "/glass-manufacturing-factory-production-line-bulk-o.jpg",
-      alt: "Glass manufacturing production line",
-    },
-    {
-      src: "/experienced-glassblower-artisan-at-work.jpg",
-      alt: "Experienced glassblower at work",
-    },
-    {
-      src: "/glass-quality-inspection-microscope.jpg",
-      alt: "Quality inspection of glass products",
     },
   ];
 
@@ -417,24 +395,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {galleryImages.map((img, index) => (
-              <div
-                key={index}
-                className={`overflow-hidden group ${
-                  index === 0 || index === 5
-                    ? "md:col-span-2 md:row-span-2"
-                    : ""
-                }`}
-              >
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  className="w-full h-full object-cover aspect-square group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-            ))}
-          </div>
+          <HomeGallery />
 
           <div className="text-center mt-12">
             <Link href="/gallery">

@@ -7,82 +7,20 @@ import { ArrowRight, MessageCircleMore } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 
-interface DynamicImage {
+interface GalleryImage {
   url: string;
   name: string;
-  category?: string;
-  description?: string;
+  category: string;
+  description: string;
 }
-
-const staticGalleryItems = [
-  {
-    name: "Molten Glass Crafting",
-    category: "Manufacturing Process",
-    description: "Skilled artisan shaping molten glass using traditional techniques",
-    image: "/artisan-glassblowing-in-factory-with-molten-glass.jpg",
-  },
-  {
-    name: "Premium Finished Products",
-    category: "Finished Goods",
-    description: "Export-grade glass products ready for dispatch",
-    image: "/finished-glass-products-premium-quality.jpg",
-  },
-  {
-    name: "Production Line",
-    category: "Bulk Manufacturing",
-    description: "Our factory floor handling large-scale production runs",
-    image: "/glass-manufacturing-factory-production-line-bulk-o.jpg",
-  },
-  {
-    name: "Master Glassblower",
-    category: "Craftsmanship",
-    description: "Experienced artisan with decades of glass-making expertise",
-    image: "/experienced-glassblower-artisan-at-work.jpg",
-  },
-  {
-    name: "Quality Inspection",
-    category: "Quality Control",
-    description: "Rigorous quality checks ensuring export-grade standards",
-    image: "/glass-quality-inspection-microscope.jpg",
-  },
-  {
-    name: "Glass Furnace",
-    category: "Manufacturing Process",
-    description: "High-temperature glass melting furnace in operation",
-    image: "/glass-manufacturing-molten-glass-furnace.jpg",
-  },
-  {
-    name: "Annealing Process",
-    category: "Manufacturing Process",
-    description: "Controlled cooling process for strength and durability",
-    image: "/glass-cooling-annealing-process.jpg",
-  },
-  {
-    name: "Final Inspection",
-    category: "Quality Control",
-    description: "Each product inspected before packaging and dispatch",
-    image: "/finished-glass-products-quality-inspection.jpg",
-  },
-  {
-    name: "Team at Work",
-    category: "Our Team",
-    description: "50+ skilled workers collaborating on the factory floor",
-    image: "/glass-factory-team-working-together.jpg",
-  },
-  {
-    name: "Workshop Heritage",
-    category: "Our Facility",
-    description: "Our family-owned workshop carrying forward Firozabad's glass legacy",
-    image: "/family-owned-glass-factory-workshop-heritage.jpg",
-  },
-];
 
 const ITEMS_PER_PAGE = 15;
 
 export default function GalleryPage() {
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
-  const [dynamicImages, setDynamicImages] = useState<DynamicImage[]>([]);
+  const [galleryItems, setGalleryItems] = useState<GalleryImage[]>([]);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+  const [loading, setLoading] = useState(true);
   const loaderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -90,7 +28,7 @@ export default function GalleryPage() {
       .then((res) => res.json())
       .then((data) => {
         if (data.images && data.images.length > 0) {
-          setDynamicImages(
+          setGalleryItems(
             data.images.map((img: { url: string; name: string }) => ({
               url: img.url,
               name: img.name,
@@ -100,19 +38,9 @@ export default function GalleryPage() {
           );
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
-
-  // Dynamic images first, then static fallback
-  const galleryItems = [
-    ...dynamicImages.map((img) => ({
-      name: img.name,
-      category: img.category || "Gallery",
-      description: img.description || "",
-      image: img.url,
-    })),
-    ...staticGalleryItems,
-  ];
 
   const hasMore = visibleCount < galleryItems.length;
 
@@ -121,7 +49,9 @@ export default function GalleryPage() {
     (entries: IntersectionObserverEntry[]) => {
       const [entry] = entries;
       if (entry.isIntersecting && hasMore) {
-        setVisibleCount((prev) => Math.min(prev + ITEMS_PER_PAGE, galleryItems.length));
+        setVisibleCount((prev) =>
+          Math.min(prev + ITEMS_PER_PAGE, galleryItems.length)
+        );
       }
     },
     [hasMore, galleryItems.length]
@@ -165,53 +95,61 @@ export default function GalleryPage() {
       {/* Gallery Grid */}
       <section className="pb-20 lg:pb-32">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {visibleItems.map((item, index) => (
-              <div
-                key={index}
-                className={`group relative overflow-hidden bg-muted cursor-pointer ${
-                  index === 0 || index === 4
-                    ? "md:col-span-2 lg:col-span-1 aspect-square lg:aspect-4/3"
-                    : "aspect-square"
-                }`}
-                onMouseEnter={() => setHoveredItem(index)}
-                onMouseLeave={() => setHoveredItem(null)}
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-
-                {/* Overlay with product details */}
-                <div
-                  className={`absolute inset-0 bg-primary/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 transition-opacity duration-300 ${
-                    hoveredItem === index ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  <div className="text-xs font-mono text-accent tracking-widest uppercase mb-3">
-                    {item.category}
-                  </div>
-                  <h3 className="text-2xl font-normal text-primary-foreground text-center mb-3 text-balance">
-                    {item.name}
-                  </h3>
-                  <p className="text-sm font-mono text-primary-foreground/70 text-center max-w-xs">
-                    {item.description}
-                  </p>
-                  <div className="mt-6 text-xs font-mono text-primary-foreground/40 tracking-widest">
-                    ANSAR OVERSEAS
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Infinite scroll trigger */}
-          {hasMore && (
-            <div ref={loaderRef} className="flex justify-center py-12">
-              <div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-foreground rounded-full animate-spin" />
+          {loading ? (
+            <div className="flex justify-center py-20">
+              <div className="w-8 h-8 border-2 border-muted-foreground/30 border-t-foreground rounded-full animate-spin" />
             </div>
+          ) : galleryItems.length === 0 ? (
+            <p className="text-center text-muted-foreground py-20">
+              Gallery images coming soon.
+            </p>
+          ) : (
+            <>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {visibleItems.map((item, index) => (
+                  <div
+                    key={index}
+                    className="group relative overflow-hidden bg-muted cursor-pointer aspect-square"
+                    onMouseEnter={() => setHoveredItem(index)}
+                    onMouseLeave={() => setHoveredItem(null)}
+                  >
+                    <img
+                      src={item.url}
+                      alt={item.name}
+                      loading="lazy"
+                      className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
+                    />
+
+                    {/* Overlay with product details */}
+                    <div
+                      className={`absolute inset-0 bg-primary/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 transition-opacity duration-300 ${
+                        hoveredItem === index ? "opacity-100" : "opacity-0"
+                      }`}
+                    >
+                      <div className="text-xs font-mono text-accent tracking-widest uppercase mb-3">
+                        {item.category}
+                      </div>
+                      <h3 className="text-2xl font-normal text-primary-foreground text-center mb-3 text-balance">
+                        {item.name}
+                      </h3>
+                      <p className="text-sm font-mono text-primary-foreground/70 text-center max-w-xs">
+                        {item.description}
+                      </p>
+                      <div className="mt-6 text-xs font-mono text-primary-foreground/40 tracking-widest">
+                        ANSAR OVERSEAS
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Infinite scroll trigger */}
+              {hasMore && (
+                <div ref={loaderRef} className="flex justify-center py-12">
+                  <div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-foreground rounded-full animate-spin" />
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
