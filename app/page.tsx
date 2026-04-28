@@ -29,9 +29,9 @@ import {
   Handshake,
   Lamp,
   Settings,
-  MessageCircleMore,
   Phone,
 } from "lucide-react";
+import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import Link from "next/link";
 import { HomeGallery } from "@/components/home-gallery";
 
@@ -40,6 +40,7 @@ export default function HomePage() {
     { icon: Factory, value: "20+", label: "Years in Business" },
     { icon: Users, value: "50+", label: "Skilled Craftsmen" },
     { icon: Award, value: "10,000+", label: "Orders Delivered" },
+    { icon: Handshake, value: "30+", label: "Trusted Clients" },
   ];
 
   const products = [
@@ -157,14 +158,14 @@ export default function HomePage() {
                   </Button>
                 </Link>
               </div>
-              <div className="flex items-center gap-6 pt-2">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-2">
                 <a
-                  href="https://wa.me/917727075499"
+                  href="https://wa.me/916399035470"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-accent transition-colors"
                 >
-                  <MessageCircleMore className="h-4 w-4" />
+                  <WhatsAppIcon className="h-4 w-4" />
                   WhatsApp Us
                 </a>
                 <a
@@ -173,6 +174,13 @@ export default function HomePage() {
                 >
                   <Phone className="h-4 w-4" />
                   +91 7727075499
+                </a>
+                <a
+                  href="tel:+916399035470"
+                  className="flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-accent transition-colors"
+                >
+                  <Phone className="h-4 w-4" />
+                  +91 6399035470
                 </a>
               </div>
             </div>
@@ -433,7 +441,7 @@ export default function HomePage() {
                 </Button>
               </Link>
               <a
-                href="https://wa.me/917727075499"
+                href="https://wa.me/916399035470"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -442,7 +450,7 @@ export default function HomePage() {
                   variant="outline"
                   className="font-mono text-sm bg-transparent cursor-pointer"
                 >
-                  <MessageCircleMore className="mr-2 h-4 w-4" />
+                  <WhatsAppIcon className="mr-2 h-4 w-4" />
                   WhatsApp Us
                 </Button>
               </a>
@@ -460,6 +468,13 @@ export default function HomePage() {
                 className="hover:text-accent transition-colors"
               >
                 +91 7727075499
+              </a>
+              <span className="hidden sm:inline">|</span>
+              <a
+                href="tel:+916399035470"
+                className="hover:text-accent transition-colors"
+              >
+                +91 6399035470
               </a>
               <span className="hidden sm:inline">|</span>
               <span>Firozabad, UP, India</span>

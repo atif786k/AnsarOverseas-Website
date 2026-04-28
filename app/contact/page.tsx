@@ -10,12 +10,12 @@ import { Label } from "@/components/ui/label";
 import {
   Mail,
   Phone,
-  MessageCircleMore,
   MapPin,
   Clock,
   Loader2,
   ArrowRight,
 } from "lucide-react";
+import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import { useState } from "react";
 import { contactFormSchema } from "@/lib/contactValidation";
 
@@ -123,36 +123,30 @@ export default function ContactPage() {
       <section className="pb-12">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <a
-              href="https://wa.me/917727075499"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-4 p-5 bg-accent/10 border border-accent/20 hover:border-accent/50 transition-colors group"
-            >
-              <MessageCircleMore className="h-8 w-8 text-accent shrink-0" />
+            <div className="flex items-center gap-4 p-5 bg-accent/10 border border-accent/20">
+              <WhatsAppIcon className="h-8 w-8 text-accent shrink-0" />
               <div>
                 <div className="text-xs font-mono text-muted-foreground mb-1">
                   WhatsApp
                 </div>
-                <div className="text-sm font-mono font-medium group-hover:text-accent transition-colors">
-                  +91 7727075499
+                <div className="flex flex-col gap-0.5">
+                  <a href="https://wa.me/916399035470" target="_blank" rel="noopener noreferrer" className="text-sm font-mono font-medium hover:text-accent transition-colors">+91 7727075499</a>
+                  <a href="https://wa.me/916399035470" target="_blank" rel="noopener noreferrer" className="text-sm font-mono font-medium hover:text-accent transition-colors">+91 6399035470</a>
                 </div>
               </div>
-            </a>
-            <a
-              href="tel:+917727075499"
-              className="flex items-center gap-4 p-5 border border-border hover:border-accent/50 transition-colors group"
-            >
+            </div>
+            <div className="flex items-center gap-4 p-5 border border-border">
               <Phone className="h-8 w-8 text-accent shrink-0" />
               <div>
                 <div className="text-xs font-mono text-muted-foreground mb-1">
                   Phone
                 </div>
-                <div className="text-sm font-mono font-medium group-hover:text-accent transition-colors">
-                  +91 7727075499
+                <div className="flex flex-col gap-0.5">
+                  <a href="tel:+917727075499" className="text-sm font-mono font-medium hover:text-accent transition-colors">+91 7727075499</a>
+                  <a href="tel:+916399035470" className="text-sm font-mono font-medium hover:text-accent transition-colors">+91 6399035470</a>
                 </div>
               </div>
-            </a>
+            </div>
             <a
               href="mailto:matif91201@gmail.com"
               className="flex items-center gap-4 p-5 border border-border hover:border-accent/50 transition-colors group"
@@ -326,29 +320,47 @@ export default function ContactPage() {
                       <div className="text-sm font-mono text-muted-foreground mb-1">
                         Phone
                       </div>
-                      <a
-                        href="tel:+917727075499"
-                        className="font-mono text-foreground hover:text-accent transition-colors"
-                      >
-                        +91 7727075499
-                      </a>
+                      <div className="flex flex-col gap-1">
+                        <a
+                          href="tel:+917727075499"
+                          className="font-mono text-foreground hover:text-accent transition-colors"
+                        >
+                          +91 7727075499
+                        </a>
+                        <a
+                          href="tel:+916399035470"
+                          className="font-mono text-foreground hover:text-accent transition-colors"
+                        >
+                          +91 6399035470
+                        </a>
+                      </div>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <MessageCircleMore className="h-5 w-5 text-accent mt-1 shrink-0" />
+                    <WhatsAppIcon className="h-5 w-5 text-accent mt-1 shrink-0" />
                     <div>
                       <div className="text-sm font-mono text-muted-foreground mb-1">
                         WhatsApp
                       </div>
-                      <a
-                        href="https://wa.me/917727075499"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-mono text-foreground hover:text-accent transition-colors"
-                      >
-                        +91 7727075499
-                      </a>
+                      <div className="flex flex-col gap-1">
+                        <a
+                          href="https://wa.me/916399035470"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-foreground hover:text-accent transition-colors"
+                        >
+                          +91 7727075499
+                        </a>
+                        <a
+                          href="https://wa.me/916399035470"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-foreground hover:text-accent transition-colors"
+                        >
+                          +91 6399035470
+                        </a>
+                      </div>
                     </div>
                   </div>
 
@@ -404,7 +416,7 @@ export default function ContactPage() {
                   matters, reach us directly via WhatsApp or phone.
                 </p>
                 <a
-                  href="https://wa.me/917727075499"
+                  href="https://wa.me/916399035470"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -412,7 +424,7 @@ export default function ContactPage() {
                     variant="outline"
                     className="font-mono text-sm bg-transparent cursor-pointer w-full"
                   >
-                    <MessageCircleMore className="mr-2 h-4 w-4" />
+                    <WhatsAppIcon className="mr-2 h-4 w-4" />
                     Chat on WhatsApp
                   </Button>
                 </a>

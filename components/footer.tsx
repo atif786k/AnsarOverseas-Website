@@ -1,11 +1,6 @@
 import Link from "next/link";
-import {
-  Mail,
-  Phone,
-  MessageCircleMore,
-  MapPin,
-  ArrowRight,
-} from "lucide-react";
+import { Mail, Phone, MapPin, ArrowRight } from "lucide-react";
+import { WhatsAppIcon } from "@/components/whatsapp-icon";
 
 export function Footer() {
   return (
@@ -31,12 +26,12 @@ export function Footer() {
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <a
-                href="https://wa.me/917727075499"
+                href="https://wa.me/916399035470"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 border border-primary-foreground/30 px-6 py-3 text-sm font-mono hover:bg-primary-foreground/10 transition-colors"
               >
-                <MessageCircleMore className="h-4 w-4" />
+                <WhatsAppIcon className="h-4 w-4" />
                 WhatsApp
               </a>
             </div>
@@ -120,32 +115,58 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start space-x-3">
                 <Phone className="h-5 w-5 text-primary-foreground/70 mt-0.5 shrink-0" />
-                <a
-                  href="tel:+917727075499"
-                  className="text-sm font-mono text-primary-foreground/80 hover:text-primary-foreground transition-colors"
-                >
-                  +91 7727075499
-                </a>
+                <div className="flex flex-col gap-1">
+                  <a
+                    href="tel:+917727075499"
+                    className="text-sm font-mono text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                  >
+                    +91 7727075499
+                  </a>
+                  <a
+                    href="tel:+916399035470"
+                    className="text-sm font-mono text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                  >
+                    +91 6399035470
+                  </a>
+                </div>
               </li>
               <li className="flex items-start space-x-3">
-                <MessageCircleMore className="h-5 w-5 text-primary-foreground/70 mt-0.5 shrink-0" />
-                <a
-                  href="https://wa.me/917727075499"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-mono text-primary-foreground/80 hover:text-primary-foreground transition-colors"
-                >
-                  WhatsApp: +91 7727075499
-                </a>
+                <WhatsAppIcon className="h-5 w-5 text-primary-foreground/70 mt-0.5 shrink-0" />
+                <div className="flex flex-col gap-1">
+                  <a
+                    href="https://wa.me/916399035470"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-mono text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                  >
+                    +91 7727075499
+                  </a>
+                  <a
+                    href="https://wa.me/916399035470"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-mono text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                  >
+                    +91 6399035470
+                  </a>
+                </div>
               </li>
               <li className="flex items-start space-x-3">
                 <Mail className="h-5 w-5 text-primary-foreground/70 mt-0.5 shrink-0" />
-                <a
-                  href="mailto:matif91201@gmail.com"
-                  className="text-sm font-mono text-primary-foreground/80 hover:text-primary-foreground transition-colors"
-                >
-                  matif91201@gmail.com
-                </a>
+                <div className="flex flex-col gap-1">
+                  <a
+                    href="mailto:matif91201@gmail.com"
+                    className="text-sm font-mono text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                  >
+                    matif91201@gmail.com
+                  </a>
+                  <a
+                    href="mailto:fardeenmohammad2@gmail.com"
+                    className="text-sm font-mono text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                  >
+                    fardeenmohammad2@gmail.com
+                  </a>
+                </div>
               </li>
               <li className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-primary-foreground/70 mt-0.5 shrink-0" />

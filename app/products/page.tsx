@@ -24,8 +24,8 @@ import {
   GlassWater,
   Settings,
   Boxes,
-  MessageCircleMore,
 } from "lucide-react";
+import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import Link from "next/link";
 
 export default function ProductsPage() {
@@ -287,7 +287,7 @@ export default function ProductsPage() {
                 </Button>
               </Link>
               <a
-                href="https://wa.me/917727075499"
+                href="https://wa.me/916399035470"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -296,7 +296,7 @@ export default function ProductsPage() {
                   variant="outline"
                   className="font-mono text-sm bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary cursor-pointer"
                 >
-                  <MessageCircleMore className="mr-2 h-4 w-4" />
+                  <WhatsAppIcon className="mr-2 h-4 w-4" />
                   WhatsApp Us
                 </Button>
               </a>

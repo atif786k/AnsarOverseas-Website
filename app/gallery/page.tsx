@@ -3,7 +3,8 @@
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MessageCircleMore } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 
@@ -176,7 +177,7 @@ export default function GalleryPage() {
                 </Button>
               </Link>
               <a
-                href="https://wa.me/917727075499"
+                href="https://wa.me/916399035470"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -185,7 +186,7 @@ export default function GalleryPage() {
                   variant="outline"
                   className="font-mono text-sm bg-transparent cursor-pointer"
                 >
-                  <MessageCircleMore className="mr-2 h-4 w-4" />
+                  <WhatsAppIcon className="mr-2 h-4 w-4" />
                   WhatsApp Us
                 </Button>
               </a>

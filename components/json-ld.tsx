@@ -24,6 +24,12 @@ export function OrganizationJsonLd() {
         contactType: "sales",
         availableLanguage: ["English", "Hindi"],
       },
+      {
+        "@type": "ContactPoint",
+        telephone: "+91-6399035470",
+        contactType: "sales",
+        availableLanguage: ["English", "Hindi"],
+      },
     ],
     email: "matif91201@gmail.com",
     telephone: "+91-7727075499",

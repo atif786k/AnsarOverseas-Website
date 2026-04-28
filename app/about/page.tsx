@@ -20,11 +20,11 @@ import {
   ArrowRight,
   Award,
   Users,
-  Gem,
   Lightbulb,
   MapPin,
   ShieldCheck,
 } from "lucide-react";
+import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import Link from "next/link";
 
 export default function AboutPage() {
@@ -300,7 +300,7 @@ export default function AboutPage() {
                 </Button>
               </Link>
               <a
-                href="https://wa.me/917727075499"
+                href="https://wa.me/916399035470"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -309,7 +309,7 @@ export default function AboutPage() {
                   variant="outline"
                   className="font-mono text-sm bg-transparent cursor-pointer"
                 >
-                  <Gem className="mr-2 h-4 w-4" />
+                  <WhatsAppIcon className="mr-2 h-4 w-4" />
                   WhatsApp Us
                 </Button>
               </a>

@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X, MessageCircleMore } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { WhatsAppIcon } from "@/components/whatsapp-icon";
 
 export function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -39,12 +40,12 @@ export function Navigation() {
               </Link>
             ))}
             <a
-              href="https://wa.me/917727075499"
+              href="https://wa.me/916399035470"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button className="font-mono text-sm cursor-pointer" size="sm">
-                <MessageCircleMore className="mr-2 h-4 w-4" />
+              <Button className="font-mono text-sm cursor-pointer bg-[#25D366] hover:bg-[#1da851] text-white" size="sm">
+                <WhatsAppIcon className="mr-2 h-4 w-4" />
                 WhatsApp
               </Button>
             </a>
@@ -81,12 +82,12 @@ export function Navigation() {
             ))}
             <div className="flex flex-col gap-3 pt-2">
               <a
-                href="https://wa.me/917727075499"
+                href="https://wa.me/916399035470"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button className="font-mono text-sm w-full cursor-pointer">
-                  <MessageCircleMore className="mr-2 h-4 w-4" />
+                <Button className="font-mono text-sm w-full cursor-pointer bg-[#25D366] hover:bg-[#1da851] text-white">
+                  <WhatsAppIcon className="mr-2 h-4 w-4" />
                   WhatsApp Us
                 </Button>
               </a>
