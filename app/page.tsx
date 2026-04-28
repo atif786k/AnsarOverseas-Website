@@ -20,7 +20,6 @@ import {
   Factory,
   Users,
   Award,
-  Globe,
   Flame,
   Boxes,
   Clock,
@@ -41,7 +40,6 @@ export default function HomePage() {
     { icon: Factory, value: "20+", label: "Years in Business" },
     { icon: Users, value: "50+", label: "Skilled Craftsmen" },
     { icon: Award, value: "10,000+", label: "Orders Delivered" },
-    { icon: Globe, value: "25+", label: "Countries Served" },
   ];
 
   const products = [
