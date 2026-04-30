@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { Upload, Trash2, Lock, ImagePlus, Loader2, X, Eye, EyeOff, CheckSquare, Square } from "lucide-react";
+import { Upload, Trash2, Lock, ImagePlus, Loader2, X, Eye, EyeOff, CheckSquare, Square, Pencil } from "lucide-react";
 
 interface UploadedImage {
   url: string;
@@ -34,6 +34,11 @@ export default function AdminGalleryPage() {
   const [selectedUrls, setSelectedUrls] = useState<Set<string>>(new Set());
   const [bulkDeleting, setBulkDeleting] = useState(false);
   const [uploadErrors, setUploadErrors] = useState<string[]>([]);
+  const [editingImage, setEditingImage] = useState<UploadedImage | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editCategory, setEditCategory] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const storedPassword = useRef("");
@@ -235,6 +240,45 @@ export default function AdminGalleryPage() {
     } else {
       setSelectedUrls(new Set(images.map((img) => img.url)));
     }
+  };
+
+  const openEdit = (img: UploadedImage) => {
+    setEditingImage(img);
+    setEditName(img.name);
+    setEditCategory(img.category);
+    setEditDescription(img.description);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingImage) return;
+    setSaving(true);
+
+    try {
+      const res = await fetch("/api/gallery/edit", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": storedPassword.current,
+        },
+        body: JSON.stringify({
+          url: editingImage.url,
+          name: editName,
+          category: editCategory,
+          description: editDescription,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        alert(`Save failed: ${data.error || "Unknown error"}`);
+      } else {
+        setEditingImage(null);
+        await fetchImages();
+      }
+    } catch {
+      alert("Save failed: Network error. Check your connection.");
+    }
+    setSaving(false);
   };
 
   const onDrop = useCallback((e: React.DragEvent) => {
@@ -498,22 +542,107 @@ export default function AdminGalleryPage() {
                       {new Date(img.uploadedAt).toLocaleDateString()}
                     </p>
                   </div>
-                  <button
-                    onClick={() => handleDelete(img.url)}
-                    disabled={deleting === img.url}
-                    className="absolute top-2 right-2 p-1.5 bg-red-600 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700 disabled:opacity-50"
-                  >
-                    {deleting === img.url ? (
-                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    ) : (
-                      <Trash2 className="w-3.5 h-3.5" />
-                    )}
-                  </button>
+                  <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                      onClick={() => openEdit(img)}
+                      className="p-1.5 bg-blue-600 text-white hover:bg-blue-700"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(img.url)}
+                      disabled={deleting === img.url}
+                      className="p-1.5 bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
+                    >
+                      {deleting === img.url ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <Trash2 className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
+
+        {/* Edit Modal */}
+        {editingImage && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div className="bg-background border border-border w-full max-w-md p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold">Edit Image Details</h3>
+                <button
+                  onClick={() => setEditingImage(null)}
+                  className="p-1 text-muted-foreground hover:text-foreground"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <img
+                src={editingImage.url}
+                alt={editName}
+                className="w-full h-40 object-cover mb-4"
+              />
+
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Name</label>
+                  <input
+                    type="text"
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-border bg-background focus:outline-none focus:border-foreground"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Category</label>
+                  <input
+                    type="text"
+                    value={editCategory}
+                    onChange={(e) => setEditCategory(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-border bg-background focus:outline-none focus:border-foreground"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Description</label>
+                  <input
+                    type="text"
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
+                    placeholder="Optional"
+                    className="w-full px-3 py-2 text-sm border border-border bg-background focus:outline-none focus:border-foreground"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={() => setEditingImage(null)}
+                  className="flex-1 py-2.5 border border-border text-sm font-medium hover:bg-muted transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveEdit}
+                  disabled={saving}
+                  className="flex-1 py-2.5 bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {saving ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    "Save Changes"
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
