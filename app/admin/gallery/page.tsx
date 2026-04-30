@@ -77,7 +77,7 @@ export default function AdminGalleryPage() {
 
   const fetchImages = async () => {
     try {
-      const res = await fetch("/api/gallery/list");
+      const res = await fetch(`/api/gallery/list?t=${Date.now()}`);
       const data = await res.json();
       setImages(data.images || []);
       setSelectedUrls(new Set());
@@ -273,6 +273,7 @@ export default function AdminGalleryPage() {
         alert(`Save failed: ${data.error || "Unknown error"}`);
       } else {
         setEditingImage(null);
+        alert("Changes saved successfully!");
         await fetchImages();
       }
     } catch {

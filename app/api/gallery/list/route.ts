@@ -1,6 +1,8 @@
 import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const { blobs } = await list({ prefix: "gallery/" });
@@ -27,7 +29,7 @@ export async function GET() {
 
         if (metaUrl) {
           try {
-            const res = await fetch(metaUrl);
+            const res = await fetch(metaUrl, { cache: "no-store" });
             const meta = await res.json();
             name = meta.name || "";
             category = meta.category || "Gallery";
