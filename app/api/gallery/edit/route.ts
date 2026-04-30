@@ -1,4 +1,4 @@
-import { put } from "@vercel/blob";
+import { put, del, list } from "@vercel/blob";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(request: NextRequest) {
@@ -18,15 +18,28 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Derive the JSON metadata path from the image URL
-    // Image URL: https://.../{path}.jpg → we need the pathname part
-    const urlObj = new URL(url);
-    const pathname = urlObj.pathname.startsWith("/")
-      ? urlObj.pathname.slice(1)
-      : urlObj.pathname;
-    const jsonPathname = pathname.replace(/\.jpg$/, ".json");
+    // Find the matching JSON metadata blob by listing all blobs
+    // and matching the base filename
+    const { blobs } = await list({ prefix: "gallery/" });
+    const imageBlob = blobs.find((b) => b.url === url);
 
-    // Upload updated metadata JSON (overwrites existing)
+    if (!imageBlob) {
+      return NextResponse.json(
+        { error: "Image not found in storage" },
+        { status: 404 }
+      );
+    }
+
+    // Derive JSON pathname from image pathname: gallery/1234_name.jpg → gallery/1234_name.json
+    const jsonPathname = imageBlob.pathname.replace(/\.jpg$/, ".json");
+
+    // Delete old JSON metadata if it exists
+    const oldJsonBlob = blobs.find((b) => b.pathname === jsonPathname);
+    if (oldJsonBlob) {
+      await del(oldJsonBlob.url);
+    }
+
+    // Upload new metadata JSON
     const metadata = JSON.stringify({
       name: name || "Untitled",
       category: category || "Gallery",
@@ -40,10 +53,10 @@ export async function PUT(request: NextRequest) {
     });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Edit error:", error);
     return NextResponse.json(
-      { error: "Failed to update image metadata" },
+      { error: `Failed to update: ${error.message || "Unknown error"}` },
       { status: 500 }
     );
   }
