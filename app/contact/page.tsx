@@ -1,14 +1,21 @@
 "use client";
 
 import type React from "react";
-
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Mail, Phone, MessageCircleMore, MapPin, Clock, Loader2 } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
+  Loader2,
+  ArrowRight,
+} from "lucide-react";
+import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import { useState } from "react";
 import { contactFormSchema } from "@/lib/contactValidation";
 
@@ -28,7 +35,6 @@ export default function ContactPage() {
     setIsLoading(true);
 
     try {
-      // Validate and sanitize form data
       const validatedData = contactFormSchema.parse({
         fullName: formData.name,
         emailAddress: formData.email,
@@ -37,8 +43,6 @@ export default function ContactPage() {
         orderType: formData.orderType,
         message: formData.message,
       });
-
-      console.log("Validated data:", validatedData);
 
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -64,12 +68,15 @@ export default function ContactPage() {
     } catch (error: any) {
       console.error("Error submitting form:", error);
 
-      // Handle Zod validation errors
       if (error.errors) {
-        const errorMessages = error.errors.map((err: any) => err.message).join("\n");
+        const errorMessages = error.errors
+          .map((err: any) => err.message)
+          .join("\n");
         alert("Validation Error:\n" + errorMessages);
       } else {
-        alert("An error occurred while sending your message. Please try again.");
+        alert(
+          "An error occurred while sending your message. Please try again."
+        );
       }
     } finally {
       setIsLoading(false);
@@ -92,17 +99,79 @@ export default function ContactPage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 lg:pt-40 lg:pb-32">
+      <section className="pt-32 pb-16 lg:pt-40 lg:pb-20">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl lg:text-7xl font-light leading-tight mb-6 text-balance">
-              Let's discuss your needs
+          <div className="max-w-4xl">
+            <div className="inline-block border border-accent/40 px-4 py-1.5 mb-6">
+              <span className="text-xs font-mono tracking-widest text-accent uppercase">
+                Get in Touch
+              </span>
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light leading-tight mb-6 text-balance">
+              Looking for a reliable glass manufacturing partner?
             </h1>
-            <p className="text-lg font-mono text-muted-foreground leading-relaxed">
-              Whether you need a custom quote, bulk order pricing, or have
-              questions about our products, we're here to help. Reach out to our
-              team today.
+            <p className="text-lg font-mono text-muted-foreground leading-relaxed max-w-2xl">
+              Whether you need a custom quote, bulk order pricing, or want to
+              discuss your product requirements — we're here to help. Reach out
+              to our team today.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Contact Bar */}
+      <section className="pb-12">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="flex items-center gap-4 p-5 bg-accent/10 border border-accent/20">
+              <WhatsAppIcon className="h-8 w-8 text-accent shrink-0" />
+              <div>
+                <div className="text-xs font-mono text-muted-foreground mb-1">
+                  WhatsApp
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <a href="https://wa.me/916399035470" target="_blank" rel="noopener noreferrer" className="text-sm font-mono font-medium hover:text-accent transition-colors">+91 7727075499</a>
+                  <a href="https://wa.me/916399035470" target="_blank" rel="noopener noreferrer" className="text-sm font-mono font-medium hover:text-accent transition-colors">+91 6399035470</a>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 p-5 border border-border">
+              <Phone className="h-8 w-8 text-accent shrink-0" />
+              <div>
+                <div className="text-xs font-mono text-muted-foreground mb-1">
+                  Phone
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <a href="tel:+917727075499" className="text-sm font-mono font-medium hover:text-accent transition-colors">+91 7727075499</a>
+                  <a href="tel:+916399035470" className="text-sm font-mono font-medium hover:text-accent transition-colors">+91 6399035470</a>
+                </div>
+              </div>
+            </div>
+            <a
+              href="mailto:msansaroverseas@gmail.com"
+              className="flex items-center gap-4 p-5 border border-border hover:border-accent/50 transition-colors group"
+            >
+              <Mail className="h-8 w-8 text-accent shrink-0" />
+              <div>
+                <div className="text-xs font-mono text-muted-foreground mb-1">
+                  Email
+                </div>
+                <div className="text-sm font-mono font-medium group-hover:text-accent transition-colors">
+                  msansaroverseas@gmail.com
+                </div>
+              </div>
+            </a>
+            <div className="flex items-center gap-4 p-5 border border-border">
+              <MapPin className="h-8 w-8 text-accent shrink-0" />
+              <div>
+                <div className="text-xs font-mono text-muted-foreground mb-1">
+                  Location
+                </div>
+                <div className="text-sm font-mono font-medium">
+                  Firozabad, UP, India
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -113,6 +182,11 @@ export default function ContactPage() {
           <div className="grid lg:grid-cols-5 gap-12 lg:gap-20">
             {/* Contact Form */}
             <div className="lg:col-span-3">
+              <h2 className="text-2xl font-light mb-2">Send us a message</h2>
+              <p className="text-sm font-mono text-muted-foreground mb-8">
+                Fill out the form below and we'll get back to you within 24
+                hours.
+              </p>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -126,6 +200,7 @@ export default function ContactPage() {
                       value={formData.name}
                       onChange={handleChange}
                       className="font-mono"
+                      placeholder="Your name"
                     />
                   </div>
                   <div className="space-y-2">
@@ -140,6 +215,7 @@ export default function ContactPage() {
                       value={formData.email}
                       onChange={handleChange}
                       className="font-mono"
+                      placeholder="your@email.com"
                     />
                   </div>
                 </div>
@@ -155,6 +231,7 @@ export default function ContactPage() {
                       value={formData.company}
                       onChange={handleChange}
                       className="font-mono"
+                      placeholder="Your company"
                     />
                   </div>
                   <div className="space-y-2">
@@ -168,6 +245,7 @@ export default function ContactPage() {
                       value={formData.phone}
                       onChange={handleChange}
                       className="font-mono"
+                      placeholder="+91 XXXXX XXXXX"
                     />
                   </div>
                 </div>
@@ -204,7 +282,7 @@ export default function ContactPage() {
                     onChange={handleChange}
                     rows={6}
                     className="font-mono"
-                    placeholder="Tell us about your requirements, quantity needs, timeline, or any specific questions..."
+                    placeholder="Tell us about your requirements — product type, quantity, specifications, timeline, or any questions you have..."
                   />
                 </div>
 
@@ -220,13 +298,16 @@ export default function ContactPage() {
                       Sending...
                     </>
                   ) : (
-                    "Send Message"
+                    <>
+                      Send Message
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </>
                   )}
                 </Button>
               </form>
             </div>
 
-            {/* Contact Information */}
+            {/* Contact Information Sidebar */}
             <div className="lg:col-span-2 space-y-8">
               <div>
                 <h2 className="text-2xl font-light mb-6">
@@ -234,48 +315,101 @@ export default function ContactPage() {
                 </h2>
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
-                    <Mail className="h-5 w-5 text-accent mt-1" />
+                    <Phone className="h-5 w-5 text-accent mt-1 shrink-0" />
+                    <div>
+                      <div className="text-sm font-mono text-muted-foreground mb-1">
+                        Phone
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <a
+                          href="tel:+917727075499"
+                          className="font-mono text-foreground hover:text-accent transition-colors"
+                        >
+                          +91 7727075499
+                        </a>
+                        <a
+                          href="tel:+916399035470"
+                          className="font-mono text-foreground hover:text-accent transition-colors"
+                        >
+                          +91 6399035470
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <WhatsAppIcon className="h-5 w-5 text-accent mt-1 shrink-0" />
+                    <div>
+                      <div className="text-sm font-mono text-muted-foreground mb-1">
+                        WhatsApp
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <a
+                          href="https://wa.me/916399035470"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-foreground hover:text-accent transition-colors"
+                        >
+                          +91 7727075499
+                        </a>
+                        <a
+                          href="https://wa.me/916399035470"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-foreground hover:text-accent transition-colors"
+                        >
+                          +91 6399035470
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <Mail className="h-5 w-5 text-accent mt-1 shrink-0" />
                     <div>
                       <div className="text-sm font-mono text-muted-foreground mb-1">
                         Email
                       </div>
                       <a
-                        href="mailto:matif91201@gmail.com"
+                        href="mailto:msansaroverseas@gmail.com"
                         className="font-mono text-foreground hover:text-accent transition-colors"
                       >
-                        matif91201@gmail.com
+                        msansaroverseas@gmail.com
                       </a>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <MessageCircleMore className="h-5 w-5 text-accent mt-1" />
+                    <MapPin className="h-5 w-5 text-accent mt-1 shrink-0" />
                     <div>
                       <div className="text-sm font-mono text-muted-foreground mb-1">
-                        WhatsApp
-                      </div>
-                      <a className="font-mono text-foreground hover:text-accent transition-colors">
-                        +91 7727075499
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-4">
-                    <MapPin className="h-5 w-5 text-accent mt-1" />
-                    <div>
-                      <div className="text-sm font-mono text-muted-foreground mb-1">
-                        Address
+                        Factory Address
                       </div>
                       <p className="font-mono text-foreground">
-                        Shyam Nagar Gadda Pathar Wali Gali
+                        Shyam Nagar, Gadda Pathar Wali Gali
                         <br />
-                        Firozabad, Uttar Pradesh, India - 283203
+                        Firozabad, Uttar Pradesh
+                        <br />
+                        India - 283203
                       </p>
                     </div>
                   </div>
 
+                  <div className="w-full aspect-video overflow-hidden border border-border">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d800!2d78.385195!3d27.1507554!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Firozabad, Uttar Pradesh — Glass City of India"
+                    />
+                  </div>
+
                   <div className="flex items-start space-x-4">
-                    <Clock className="h-5 w-5 text-accent mt-1" />
+                    <Clock className="h-5 w-5 text-accent mt-1 shrink-0" />
                     <div>
                       <div className="text-sm font-mono text-muted-foreground mb-1">
                         Business Hours
@@ -290,30 +424,31 @@ export default function ContactPage() {
 
               <div className="pt-8 border-t border-border">
                 <h3 className="text-xl font-light mb-4">Quick Response</h3>
-                <p className="text-sm font-mono text-muted-foreground leading-relaxed">
-                  We typically respond to inquiries within 24 hours during
-                  business days. For urgent matters, please call us directly.
+                <p className="text-sm font-mono text-muted-foreground leading-relaxed mb-4">
+                  We typically respond to inquiries within 24 hours. For urgent
+                  matters, reach us directly via WhatsApp or phone.
                 </p>
+                <a
+                  href="https://wa.me/916399035470"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button
+                    variant="outline"
+                    className="font-mono text-sm bg-transparent cursor-pointer w-full"
+                  >
+                    <WhatsAppIcon className="mr-2 h-4 w-4" />
+                    Chat on WhatsApp
+                  </Button>
+                </a>
               </div>
+
             </div>
           </div>
         </div>
       </section>
 
-      {/* Map Section */}
-      <section className="pb-20 lg:pb-32">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="aspect-[21/9] bg-muted">
-            <img
-              src="/factory-location-map-aerial-view.jpg"
-              alt="Our location"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Quick Links */}
+      {/* FAQ Section */}
       <section className="py-20 lg:py-32 bg-muted">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-3xl mx-auto">
@@ -322,16 +457,34 @@ export default function ContactPage() {
             </h2>
             <div className="space-y-6">
               {[
-                "What is the minimum order quantity?",
-                "Do you ship internationally?",
-                "Can you create custom designs?",
-                "What is your typical lead time?",
-                "Do you offer samples?",
-              ].map((question, index) => (
-                <div key={index} className="border-b border-border pb-4">
-                  <button className="w-full text-left font-mono text-sm hover:text-accent transition-colors">
-                    {question}
-                  </button>
+                {
+                  q: "What is the minimum order quantity?",
+                  a: "MOQ varies by product type. For standard items, we typically work with orders of 500+ pieces. For custom products, MOQ depends on the complexity. Contact us for specifics.",
+                },
+                {
+                  q: "Do you ship internationally?",
+                  a: "Yes, we export to 25+ countries. We handle proper export packaging and documentation. We can ship FOB Firozabad or arrange door-to-door delivery.",
+                },
+                {
+                  q: "Can you create custom designs?",
+                  a: "Absolutely. Custom manufacturing is our specialty. Share your specifications, drawings, or even a rough idea — we'll develop samples for your approval before production.",
+                },
+                {
+                  q: "What is your typical lead time?",
+                  a: "Standard products: 2-3 weeks. Custom orders: 3-5 weeks including sample development. Bulk orders may require additional time depending on quantity.",
+                },
+                {
+                  q: "Do you offer samples?",
+                  a: "Yes, we provide samples for evaluation before placing bulk orders. Sample charges may apply for custom products, which are adjusted against the final order.",
+                },
+              ].map((faq, index) => (
+                <div key={index} className="border-b border-border pb-6">
+                  <h4 className="font-mono text-sm font-medium mb-2">
+                    {faq.q}
+                  </h4>
+                  <p className="text-sm font-mono text-muted-foreground leading-relaxed">
+                    {faq.a}
+                  </p>
                 </div>
               ))}
             </div>

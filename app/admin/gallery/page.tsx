@@ -1,0 +1,650 @@
+"use client";
+
+import { useState, useCallback, useRef } from "react";
+import { Upload, Trash2, Lock, ImagePlus, Loader2, X, Eye, EyeOff, CheckSquare, Square, Pencil } from "lucide-react";
+
+interface UploadedImage {
+  url: string;
+  pathname: string;
+  name: string;
+  category: string;
+  description: string;
+  uploadedAt: string;
+  size: number;
+}
+
+interface PendingUpload {
+  file: File;
+  preview: string;
+  name: string;
+  category: string;
+  description: string;
+}
+
+export default function AdminGalleryPage() {
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [authError, setAuthError] = useState("");
+  const [images, setImages] = useState<UploadedImage[]>([]);
+  const [pendingUploads, setPendingUploads] = useState<PendingUpload[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [selectedUrls, setSelectedUrls] = useState<Set<string>>(new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
+  const [uploadErrors, setUploadErrors] = useState<string[]>([]);
+  const [editingImage, setEditingImage] = useState<UploadedImage | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editCategory, setEditCategory] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [saving, setSaving] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const storedPassword = useRef("");
+
+  const handleLogin = async () => {
+    setAuthError("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/gallery/list", {
+        headers: { "x-admin-password": password },
+      });
+      const data = await res.json();
+
+      const testRes = await fetch("/api/gallery/upload", {
+        method: "POST",
+        headers: { "x-admin-password": password },
+        body: new FormData(),
+      });
+
+      if (testRes.status === 401) {
+        setAuthError("Incorrect password");
+        setLoading(false);
+        return;
+      }
+
+      storedPassword.current = password;
+      setAuthenticated(true);
+      setImages(data.images || []);
+    } catch {
+      setAuthError("Connection error. Please try again.");
+    }
+
+    setLoading(false);
+  };
+
+  const fetchImages = async () => {
+    try {
+      const res = await fetch(`/api/gallery/list?t=${Date.now()}`);
+      const data = await res.json();
+      setImages(data.images || []);
+      setSelectedUrls(new Set());
+    } catch {
+      // silent fail
+    }
+  };
+
+  const handleFilesSelected = (files: FileList | null) => {
+    if (!files) return;
+
+    const newPending: PendingUpload[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const isImage = file.type.startsWith("image/") || file.name.toLowerCase().endsWith(".heic") || file.name.toLowerCase().endsWith(".heif");
+      if (!isImage) continue;
+
+      const nameFromFile = file.name
+        .replace(/\.[^.]+$/, "")
+        .replace(/[-_]/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+
+      newPending.push({
+        file,
+        preview: URL.createObjectURL(file),
+        name: nameFromFile,
+        category: "Gallery",
+        description: "",
+      });
+    }
+
+    setPendingUploads((prev) => [...prev, ...newPending]);
+  };
+
+  const removePending = (index: number) => {
+    setPendingUploads((prev) => {
+      const updated = [...prev];
+      URL.revokeObjectURL(updated[index].preview);
+      updated.splice(index, 1);
+      return updated;
+    });
+  };
+
+  const updatePending = (
+    index: number,
+    field: keyof PendingUpload,
+    value: string
+  ) => {
+    setPendingUploads((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+
+  const handleUploadAll = async () => {
+    if (pendingUploads.length === 0) return;
+    setUploading(true);
+    setUploadErrors([]);
+    const errors: string[] = [];
+
+    for (const item of pendingUploads) {
+      const formData = new FormData();
+      formData.append("file", item.file);
+      formData.append("name", item.name);
+      formData.append("category", item.category);
+      formData.append("description", item.description);
+
+      try {
+        const res = await fetch("/api/gallery/upload", {
+          method: "POST",
+          headers: { "x-admin-password": storedPassword.current },
+          body: formData,
+        });
+
+        if (!res.ok) {
+          const data = await res.json();
+          errors.push(`"${item.name}": ${data.error || `Failed (${res.status})`}`);
+        }
+      } catch {
+        errors.push(`"${item.name}": Network error. Check your connection.`);
+      }
+    }
+
+    pendingUploads.forEach((p) => URL.revokeObjectURL(p.preview));
+    setPendingUploads([]);
+    setUploading(false);
+    setUploadErrors(errors);
+    await fetchImages();
+  };
+
+  const handleDelete = async (url: string) => {
+    if (!confirm("Delete this image? This cannot be undone.")) return;
+
+    setDeleting(url);
+    try {
+      const res = await fetch("/api/gallery/delete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": storedPassword.current,
+        },
+        body: JSON.stringify({ urls: [url] }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        alert(`Delete failed: ${data.error || "Unknown error"}`);
+      } else {
+        await fetchImages();
+      }
+    } catch {
+      alert("Delete failed: Network error. Check your connection.");
+    }
+    setDeleting(null);
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedUrls.size === 0) return;
+    if (!confirm(`Delete ${selectedUrls.size} selected image${selectedUrls.size > 1 ? "s" : ""}? This cannot be undone.`)) return;
+
+    setBulkDeleting(true);
+    try {
+      const res = await fetch("/api/gallery/delete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": storedPassword.current,
+        },
+        body: JSON.stringify({ urls: Array.from(selectedUrls) }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        alert(`Delete failed: ${data.error || "Unknown error"}`);
+      } else {
+        await fetchImages();
+      }
+    } catch {
+      alert("Delete failed: Network error. Check your connection.");
+    }
+    setBulkDeleting(false);
+  };
+
+  const toggleSelect = (url: string) => {
+    setSelectedUrls((prev) => {
+      const next = new Set(prev);
+      if (next.has(url)) {
+        next.delete(url);
+      } else {
+        next.add(url);
+      }
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedUrls.size === images.length) {
+      setSelectedUrls(new Set());
+    } else {
+      setSelectedUrls(new Set(images.map((img) => img.url)));
+    }
+  };
+
+  const openEdit = (img: UploadedImage) => {
+    setEditingImage(img);
+    setEditName(img.name);
+    setEditCategory(img.category);
+    setEditDescription(img.description);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingImage) return;
+    setSaving(true);
+
+    try {
+      const res = await fetch("/api/gallery/edit", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": storedPassword.current,
+        },
+        body: JSON.stringify({
+          url: editingImage.url,
+          name: editName,
+          category: editCategory,
+          description: editDescription,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        alert(`Save failed: ${data.error || "Unknown error"}`);
+      } else {
+        setEditingImage(null);
+        alert("Changes saved successfully!");
+        await fetchImages();
+      }
+    } catch {
+      alert("Save failed: Network error. Check your connection.");
+    }
+    setSaving(false);
+  };
+
+  const onDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    handleFilesSelected(e.dataTransfer.files);
+  }, []);
+
+  const onDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+  }, []);
+
+  // ===== LOGIN SCREEN =====
+  if (!authenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background p-4">
+        <div className="w-full max-w-sm border border-border p-8">
+          <div className="flex items-center gap-3 mb-6">
+            <Lock className="w-5 h-5 text-muted-foreground" />
+            <h1 className="text-lg font-semibold">Gallery Admin</h1>
+          </div>
+
+          <div className="space-y-4">
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter admin password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+                className="w-full px-4 py-3 pr-12 border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-foreground"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+
+            {authError && (
+              <p className="text-sm text-red-600">{authError}</p>
+            )}
+
+            <button
+              onClick={handleLogin}
+              disabled={loading || !password}
+              className="w-full py-3 bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+            >
+              {loading ? "Verifying..." : "Access Gallery Admin"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ===== ADMIN DASHBOARD =====
+  return (
+    <div className="min-h-screen bg-background p-4 md:p-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-2xl font-semibold">Gallery Manager</h1>
+          <span className="text-sm text-muted-foreground">
+            {images.length} image{images.length !== 1 ? "s" : ""} uploaded
+          </span>
+        </div>
+
+        {/* Upload Area */}
+        <div
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+          className="border-2 border-dashed border-border hover:border-foreground/30 transition-colors p-8 mb-8 text-center cursor-pointer"
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <ImagePlus className="w-10 h-10 mx-auto mb-3 text-muted-foreground" />
+          <p className="text-muted-foreground mb-1">
+            Tap to select images or drag & drop
+          </p>
+          <p className="text-sm text-muted-foreground">
+            JPEG, PNG, WebP, HEIC — auto-compressed to optimal size
+          </p>
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            accept="image/*,.heic,.heif"
+            className="hidden"
+            onChange={(e) => handleFilesSelected(e.target.files)}
+          />
+        </div>
+
+        {/* Upload Errors */}
+        {uploadErrors.length > 0 && (
+          <div className="mb-8 border border-red-300 bg-red-50 p-4">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm font-medium text-red-800">
+                {uploadErrors.length} upload{uploadErrors.length > 1 ? "s" : ""} failed
+              </p>
+              <button
+                onClick={() => setUploadErrors([])}
+                className="text-red-600 hover:text-red-800"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <ul className="space-y-1">
+              {uploadErrors.map((err, i) => (
+                <li key={i} className="text-sm text-red-700">{err}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Pending Uploads */}
+        {pendingUploads.length > 0 && (
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-medium">
+                Ready to upload ({pendingUploads.length})
+              </h2>
+              <button
+                onClick={handleUploadAll}
+                disabled={uploading}
+                className="flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+              >
+                {uploading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Upload className="w-4 h-4" />
+                )}
+                {uploading ? "Uploading..." : "Upload All"}
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {pendingUploads.map((item, index) => (
+                <div key={index} className="border border-border p-3">
+                  <div className="relative mb-3">
+                    <img
+                      src={item.preview}
+                      alt={item.name}
+                      className="w-full h-40 object-cover"
+                    />
+                    <button
+                      onClick={() => removePending(index)}
+                      className="absolute top-2 right-2 p-1 bg-black/60 text-white hover:bg-black/80"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <input
+                    type="text"
+                    placeholder="Image name"
+                    value={item.name}
+                    onChange={(e) =>
+                      updatePending(index, "name", e.target.value)
+                    }
+                    className="w-full px-3 py-2 text-sm border border-border bg-background mb-2 focus:outline-none focus:border-foreground"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Category (e.g., Manufacturing, Products)"
+                    value={item.category}
+                    onChange={(e) =>
+                      updatePending(index, "category", e.target.value)
+                    }
+                    className="w-full px-3 py-2 text-sm border border-border bg-background mb-2 focus:outline-none focus:border-foreground"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Description (optional)"
+                    value={item.description}
+                    onChange={(e) =>
+                      updatePending(index, "description", e.target.value)
+                    }
+                    className="w-full px-3 py-2 text-sm border border-border bg-background focus:outline-none focus:border-foreground"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Existing Images */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-medium">Uploaded Images</h2>
+            {images.length > 0 && (
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={toggleSelectAll}
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {selectedUrls.size === images.length ? (
+                    <CheckSquare className="w-4 h-4" />
+                  ) : (
+                    <Square className="w-4 h-4" />
+                  )}
+                  {selectedUrls.size === images.length ? "Deselect All" : "Select All"}
+                </button>
+                {selectedUrls.size > 0 && (
+                  <button
+                    onClick={handleBulkDelete}
+                    disabled={bulkDeleting}
+                    className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
+                  >
+                    {bulkDeleting ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Trash2 className="w-3.5 h-3.5" />
+                    )}
+                    Delete {selectedUrls.size} selected
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+
+          {images.length === 0 ? (
+            <p className="text-muted-foreground text-center py-12">
+              No images uploaded yet. Use the area above to add photos.
+            </p>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {images.map((img) => (
+                <div
+                  key={img.url}
+                  className={`group relative border transition-colors ${
+                    selectedUrls.has(img.url)
+                      ? "border-foreground ring-2 ring-foreground/20"
+                      : "border-border"
+                  }`}
+                >
+                  {/* Selection checkbox */}
+                  <button
+                    onClick={() => toggleSelect(img.url)}
+                    className="absolute top-2 left-2 z-10 p-1 bg-white/80 hover:bg-white transition-colors"
+                  >
+                    {selectedUrls.has(img.url) ? (
+                      <CheckSquare className="w-4 h-4 text-foreground" />
+                    ) : (
+                      <Square className="w-4 h-4 text-muted-foreground" />
+                    )}
+                  </button>
+
+                  <img
+                    src={img.url}
+                    alt={img.name}
+                    className="w-full h-40 object-cover"
+                  />
+                  <div className="p-2">
+                    <p className="text-sm font-medium truncate">{img.name}</p>
+                    <p className="text-xs text-accent truncate">{img.category}</p>
+                    {img.description && (
+                      <p className="text-xs text-muted-foreground truncate">{img.description}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {new Date(img.uploadedAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                      onClick={() => openEdit(img)}
+                      className="p-1.5 bg-blue-600 text-white hover:bg-blue-700"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(img.url)}
+                      disabled={deleting === img.url}
+                      className="p-1.5 bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
+                    >
+                      {deleting === img.url ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <Trash2 className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Edit Modal */}
+        {editingImage && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div className="bg-background border border-border w-full max-w-md p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold">Edit Image Details</h3>
+                <button
+                  onClick={() => setEditingImage(null)}
+                  className="p-1 text-muted-foreground hover:text-foreground"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <img
+                src={editingImage.url}
+                alt={editName}
+                className="w-full h-40 object-cover mb-4"
+              />
+
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Name</label>
+                  <input
+                    type="text"
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-border bg-background focus:outline-none focus:border-foreground"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Category</label>
+                  <input
+                    type="text"
+                    value={editCategory}
+                    onChange={(e) => setEditCategory(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-border bg-background focus:outline-none focus:border-foreground"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Description</label>
+                  <input
+                    type="text"
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
+                    placeholder="Optional"
+                    className="w-full px-3 py-2 text-sm border border-border bg-background focus:outline-none focus:border-foreground"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={() => setEditingImage(null)}
+                  className="flex-1 py-2.5 border border-border text-sm font-medium hover:bg-muted transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveEdit}
+                  disabled={saving}
+                  className="flex-1 py-2.5 bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {saving ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    "Save Changes"
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
