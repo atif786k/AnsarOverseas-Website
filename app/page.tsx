@@ -473,10 +473,10 @@ export default function HomePage() {
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4 text-sm font-mono text-muted-foreground">
               <a
-                href="mailto:matif91201@gmail.com"
+                href="mailto:msansaroverseas@gmail.com"
                 className="hover:text-accent transition-colors"
               >
-                matif91201@gmail.com
+                msansaroverseas@gmail.com
               </a>
               <span className="hidden sm:inline">|</span>
               <a

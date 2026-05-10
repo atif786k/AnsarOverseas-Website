@@ -155,16 +155,10 @@ export function Footer() {
                 <Mail className="h-5 w-5 text-primary-foreground/70 mt-0.5 shrink-0" />
                 <div className="flex flex-col gap-1">
                   <a
-                    href="mailto:matif91201@gmail.com"
+                    href="mailto:msansaroverseas@gmail.com"
                     className="text-sm font-mono text-primary-foreground/80 hover:text-primary-foreground transition-colors"
                   >
-                    matif91201@gmail.com
-                  </a>
-                  <a
-                    href="mailto:fardeenmohammad2@gmail.com"
-                    className="text-sm font-mono text-primary-foreground/80 hover:text-primary-foreground transition-colors"
-                  >
-                    fardeenmohammad2@gmail.com
+                    msansaroverseas@gmail.com
                   </a>
                 </div>
               </li>

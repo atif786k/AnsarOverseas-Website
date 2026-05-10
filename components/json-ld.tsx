@@ -31,7 +31,7 @@ export function OrganizationJsonLd() {
         availableLanguage: ["English", "Hindi"],
       },
     ],
-    email: "matif91201@gmail.com",
+    email: "msansaroverseas@gmail.com",
     telephone: "+91-7727075499",
     areaServed: {
       "@type": "GeoCircle",
@@ -70,7 +70,7 @@ export function LocalBusinessJsonLd() {
       "https://ansar-overseas-website.vercel.app/artisan-glassblowing-in-factory-with-molten-glass.jpg",
     url: "https://ansar-overseas-website.vercel.app",
     telephone: "+91-7727075499",
-    email: "matif91201@gmail.com",
+    email: "msansaroverseas@gmail.com",
     priceRange: "$$",
     address: {
       "@type": "PostalAddress",

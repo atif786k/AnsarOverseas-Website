@@ -148,7 +148,7 @@ export default function ContactPage() {
               </div>
             </div>
             <a
-              href="mailto:matif91201@gmail.com"
+              href="mailto:msansaroverseas@gmail.com"
               className="flex items-center gap-4 p-5 border border-border hover:border-accent/50 transition-colors group"
             >
               <Mail className="h-8 w-8 text-accent shrink-0" />
@@ -157,7 +157,7 @@ export default function ContactPage() {
                   Email
                 </div>
                 <div className="text-sm font-mono font-medium group-hover:text-accent transition-colors">
-                  matif91201@gmail.com
+                  msansaroverseas@gmail.com
                 </div>
               </div>
             </a>
@@ -371,10 +371,10 @@ export default function ContactPage() {
                         Email
                       </div>
                       <a
-                        href="mailto:matif91201@gmail.com"
+                        href="mailto:msansaroverseas@gmail.com"
                         className="font-mono text-foreground hover:text-accent transition-colors"
                       >
-                        matif91201@gmail.com
+                        msansaroverseas@gmail.com
                       </a>
                     </div>
                   </div>

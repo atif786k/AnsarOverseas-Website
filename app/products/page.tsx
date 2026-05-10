@@ -45,7 +45,7 @@ export default function ProductsPage() {
       ],
       useCases:
         "Ideal for lighting manufacturers, chandelier brands, and OEM lighting suppliers looking for reliable custom glass components.",
-      image: "/glass-manufacturing-molten-glass-furnace.jpg",
+      image: "/product-lamp-glass.png",
     },
     {
       icon: Flame,
@@ -62,7 +62,7 @@ export default function ProductsPage() {
       ],
       useCases:
         "Perfect for home decor brands, candle companies, gift exporters, and retail chains looking for quality candle glassware.",
-      image: "/artisan-glassblowing-in-factory-with-molten-glass.jpg",
+      image: "/product-candle-holders.png",
     },
     {
       icon: Gem,
@@ -79,7 +79,7 @@ export default function ProductsPage() {
       ],
       useCases:
         "Designed for handicraft exporters, home decor brands, interior designers, and furniture accessory makers.",
-      image: "/finished-glass-products-premium-quality.jpg",
+      image: "/product-decorative-glass.png",
     },
     {
       icon: GlassWater,
@@ -96,7 +96,7 @@ export default function ProductsPage() {
       ],
       useCases:
         "Suitable for HORECA suppliers, retail brands, wholesale distributors, and beverage companies needing consistent bulk supply.",
-      image: "/finished-glass-products-quality-inspection.jpg",
+      image: "/product-drinkware.png",
     },
     {
       icon: Settings,
@@ -113,7 +113,7 @@ export default function ProductsPage() {
       ],
       useCases:
         "For OEM manufacturers, product designers, startups, and any business with unique glass requirements.",
-      image: "/glass-quality-inspection-microscope.jpg",
+      image: "/product-custom-glass.png",
     },
   ];
 
