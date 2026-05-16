@@ -114,6 +114,45 @@ export function LocalBusinessJsonLd() {
   );
 }
 
+export function ImageGalleryJsonLd({
+  images,
+}: {
+  images: { url: string; name: string; category: string; description: string }[];
+}) {
+  const siteUrl = "https://ansar-overseas-website.vercel.app";
+
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "ImageGallery",
+    name: "Ansar Overseas Glass Manufacturing Gallery",
+    description:
+      "Manufacturing process, factory floor, and finished glass products from Ansar Overseas, Firozabad, India.",
+    url: `${siteUrl}/gallery`,
+    publisher: {
+      "@type": "Organization",
+      name: "M/S Ansar Overseas",
+      url: siteUrl,
+    },
+    image: images.map((img) => ({
+      "@type": "ImageObject",
+      contentUrl: img.url,
+      name: img.name,
+      description: img.description || img.name,
+      creator: {
+        "@type": "Organization",
+        name: "M/S Ansar Overseas",
+      },
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+
 export function FAQJsonLd({
   faqs,
 }: {

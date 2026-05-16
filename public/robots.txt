@@ -5,5 +5,6 @@ Allow: /
 # Disallow API routes
 Disallow: /api/
 
-# Sitemap
+# Sitemaps
 Sitemap: https://ansar-overseas-website.vercel.app/sitemap.xml
+Sitemap: https://ansar-overseas-website.vercel.app/gallery-sitemap.xml
