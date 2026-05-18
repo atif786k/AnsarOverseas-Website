@@ -180,11 +180,19 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 text-base font-mono text-muted-foreground leading-relaxed">
                 <p>
-                  Firozabad is India's largest hub for glass manufacturing —
-                  home to thousands of glass factories and an ecosystem that has
-                  been perfecting glass-making for over a century.
+                  Firozabad — widely known as the "Glass City of India" —
+                  is the country's largest glass manufacturing hub, home to
+                  over 10,000 glass production units and an ecosystem perfecting
+                  glass-making for over a century.
                 </p>
-                <p>Being based here gives us distinct advantages:</p>
+                <p>
+                  As a glass manufacturer based in Firozabad, we benefit from
+                  unmatched access to skilled artisans, competitive raw material
+                  pricing, and deep industry expertise. This translates directly
+                  into better quality and lower costs for our B2B buyers and
+                  export partners.
+                </p>
+                <p>Key advantages of sourcing from Firozabad:</p>
               </div>
               <ul className="space-y-3">
                 {[

@@ -153,6 +153,68 @@ export function ImageGalleryJsonLd({
   );
 }
 
+export function ProductJsonLd({
+  name,
+  description,
+  category,
+  url,
+  image,
+}: {
+  name: string;
+  description: string;
+  category: string;
+  url: string;
+  image?: string;
+}) {
+  const siteUrl = "https://ansar-overseas-website.vercel.app";
+
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name,
+    description,
+    category,
+    url: `${siteUrl}${url}`,
+    ...(image && { image: `${siteUrl}${image}` }),
+    brand: {
+      "@type": "Brand",
+      name: "Ansar Overseas",
+    },
+    manufacturer: {
+      "@type": "Organization",
+      name: "M/S Ansar Overseas",
+      url: siteUrl,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Firozabad",
+        addressRegion: "Uttar Pradesh",
+        addressCountry: "IN",
+      },
+    },
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: "INR",
+      availability: "https://schema.org/InStock",
+      eligibleRegion: {
+        "@type": "GeoCircle",
+        geoMidpoint: {
+          "@type": "GeoCoordinates",
+          latitude: 27.1507,
+          longitude: 78.3957,
+        },
+        geoRadius: "50000000",
+      },
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+
 export function FAQJsonLd({
   faqs,
 }: {

@@ -67,6 +67,7 @@ export function Footer() {
                 { href: "/products", label: "Products" },
                 { href: "/gallery", label: "Gallery" },
                 { href: "/about", label: "About Us" },
+                { href: "/blog", label: "Blog" },
                 { href: "/contact", label: "Contact" },
               ].map((item) => (
                 <li key={item.href}>
@@ -88,19 +89,19 @@ export function Footer() {
             </h3>
             <ul className="space-y-3">
               {[
-                "Lamp Glass & Lighting",
-                "Candle Holders & Votives",
-                "Decorative Glass",
-                "Drinkware & Containers",
-                "Custom Glass Components",
-                "Bulk Orders",
+                { label: "Lamp Glass & Lighting", href: "/products/lamp-glass" },
+                { label: "Candle Holders & Votives", href: "/products/candle-holders" },
+                { label: "Decorative Glass", href: "/products/decorative-glass" },
+                { label: "Drinkware & Containers", href: "/products/drinkware" },
+                { label: "Custom Glass Components", href: "/products/custom-glass" },
+                { label: "All Products", href: "/products" },
               ].map((item) => (
-                <li key={item}>
+                <li key={item.href}>
                   <Link
-                    href="/products"
+                    href={item.href}
                     className="text-sm font-mono text-primary-foreground/70 hover:text-primary-foreground transition-colors"
                   >
-                    {item}
+                    {item.label}
                   </Link>
                 </li>
               ))}

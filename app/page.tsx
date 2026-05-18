@@ -127,9 +127,9 @@ export default function HomePage() {
                   </span>
                 </div>
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.1] text-balance">
-                  Custom Glass Manufacturing for{" "}
+                  Custom Glass Manufacturing in India for{" "}
                   <span className="font-semibold italic">
-                    Exporters & Lighting Brands
+                    Exporters & B2B Buyers
                   </span>
                 </h1>
                 <p className="text-lg font-mono text-muted-foreground leading-relaxed max-w-xl">

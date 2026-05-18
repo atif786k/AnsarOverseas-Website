@@ -28,6 +28,31 @@ const faqs = [
     answer:
       "Yes, we provide samples for evaluation before placing bulk orders. Sample charges may apply for custom products, which are adjusted against the final order.",
   },
+  {
+    question: "What types of glass products do you manufacture?",
+    answer:
+      "We manufacture lamp glass and lighting components, candle holders and votives, decorative glass for handicrafts, drinkware and containers, and fully custom glass components. We serve B2B buyers, exporters, and bulk purchasers.",
+  },
+  {
+    question: "Do you manufacture OEM glass components?",
+    answer:
+      "Yes, OEM manufacturing is one of our core strengths. We produce glass components to your exact specifications — from technical drawings to production — with custom branding, etching, and packaging options.",
+  },
+  {
+    question: "What quality standards do you follow?",
+    answer:
+      "Every product goes through multi-stage quality checks — from raw material inspection to final packaging. We ensure consistent thickness, clarity, and finish across batches. Our products meet export-quality standards for international markets.",
+  },
+  {
+    question: "How is glass packaged for export?",
+    answer:
+      "We use multi-layer protective packaging including individual wrapping, foam inserts, corrugated cartons, and wooden crates for international shipments. Packaging is designed to withstand long-distance transit with zero breakage.",
+  },
+  {
+    question: "Can you handle large bulk orders?",
+    answer:
+      "Yes. With 50+ skilled craftsmen and a large manufacturing setup in Firozabad, we handle bulk orders of 10,000+ pieces with consistent quality across every batch. We also support recurring supply partnerships.",
+  },
 ];
 
 export default function ContactLayout({

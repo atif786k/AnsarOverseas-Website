@@ -46,6 +46,7 @@ export default function ProductsPage() {
       useCases:
         "Ideal for lighting manufacturers, chandelier brands, and OEM lighting suppliers looking for reliable custom glass components.",
       image: "/product-lamp-glass.png",
+      href: "/products/lamp-glass",
     },
     {
       icon: Flame,
@@ -63,6 +64,7 @@ export default function ProductsPage() {
       useCases:
         "Perfect for home decor brands, candle companies, gift exporters, and retail chains looking for quality candle glassware.",
       image: "/product-candle-holders.png",
+      href: "/products/candle-holders",
     },
     {
       icon: Gem,
@@ -80,6 +82,7 @@ export default function ProductsPage() {
       useCases:
         "Designed for handicraft exporters, home decor brands, interior designers, and furniture accessory makers.",
       image: "/product-decorative-glass.png",
+      href: "/products/decorative-glass",
     },
     {
       icon: GlassWater,
@@ -97,6 +100,7 @@ export default function ProductsPage() {
       useCases:
         "Suitable for HORECA suppliers, retail brands, wholesale distributors, and beverage companies needing consistent bulk supply.",
       image: "/product-drinkware.png",
+      href: "/products/drinkware",
     },
     {
       icon: Settings,
@@ -114,6 +118,7 @@ export default function ProductsPage() {
       useCases:
         "For OEM manufacturers, product designers, startups, and any business with unique glass requirements.",
       image: "/product-custom-glass.png",
+      href: "/products/custom-glass",
     },
   ];
 
@@ -185,25 +190,26 @@ export default function ProductsPage() {
                           {category.useCases}
                         </p>
                       </div>
-                      <Link href="/contact">
+                      <Link href={category.href}>
                         <Button className="font-mono text-sm cursor-pointer mt-2">
-                          Request Pricing
+                          View Details
                           <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                       </Link>
                     </div>
                   </div>
-                  <div
-                    className={`aspect-4/3 overflow-hidden ${
+                  <Link
+                    href={category.href}
+                    className={`aspect-4/3 overflow-hidden block ${
                       index % 2 === 1 ? "lg:order-1" : ""
                     }`}
                   >
                     <img
                       src={category.image}
                       alt={category.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                     />
-                  </div>
+                  </Link>
                 </div>
               );
             })}
