@@ -297,7 +297,7 @@ export default function CandleHoldersPage() {
       {/* Specifications Table */}
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mb-12 lg:mb-16">
+          <div className="max-w-3xl mx-auto mb-12 lg:mb-16">
             <span className="text-xs font-mono tracking-widest text-accent uppercase">
               Technical Details
             </span>
@@ -310,7 +310,7 @@ export default function CandleHoldersPage() {
               customized to match your exact requirements.
             </p>
           </div>
-          <div className="max-w-3xl">
+          <div className="max-w-3xl mx-auto">
             <div className="border border-border">
               {specifications.map((spec, index) => (
                 <div
@@ -341,7 +341,7 @@ export default function CandleHoldersPage() {
       {/* FAQ Section */}
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mb-12 lg:mb-16">
+          <div className="max-w-3xl mx-auto mb-12 lg:mb-16">
             <span className="text-xs font-mono tracking-widest text-accent uppercase">
               Common Questions
             </span>
@@ -349,7 +349,7 @@ export default function CandleHoldersPage() {
               Frequently Asked Questions
             </h2>
           </div>
-          <div className="max-w-3xl">
+          <div className="max-w-3xl mx-auto">
             <FAQAccordion faqs={faqs} />
           </div>
         </div>

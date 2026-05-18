@@ -304,7 +304,7 @@ export default function LampGlassPage() {
       {/* FAQ Section */}
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mb-12">
+          <div className="max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl lg:text-5xl font-light mb-4">
               Frequently Asked Questions
             </h2>
@@ -313,7 +313,7 @@ export default function LampGlassPage() {
               lamp glass manufacturing capabilities.
             </p>
           </div>
-          <div className="max-w-3xl">
+          <div className="max-w-3xl mx-auto">
             <FAQAccordion faqs={faqs} />
           </div>
         </div>
