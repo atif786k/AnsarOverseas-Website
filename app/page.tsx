@@ -301,8 +301,43 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== PRODUCTS / CAPABILITIES SECTION ===== */}
+      {/* ===== GALLERY SECTION ===== */}
       <section className="py-20 lg:py-32 bg-muted">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <div className="inline-block border border-accent/40 px-4 py-1.5 mb-6">
+              <span className="text-xs font-mono tracking-widest text-accent uppercase">
+                Our Work
+              </span>
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-light mb-6 text-balance">
+              From our factory floor
+            </h2>
+            <p className="text-lg font-mono text-muted-foreground leading-relaxed">
+              A glimpse into our manufacturing process and the products we
+              create.
+            </p>
+          </div>
+
+          <HomeGallery />
+
+          <div className="text-center mt-12">
+            <Link href="/gallery">
+              <Button
+                size="lg"
+                variant="outline"
+                className="font-mono text-sm bg-transparent cursor-pointer"
+              >
+                View Full Gallery
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== PRODUCTS / CAPABILITIES SECTION ===== */}
+      <section className="py-20 lg:py-32">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <div className="inline-block border border-accent/40 px-4 py-1.5 mb-6">
@@ -361,7 +396,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== WHY CHOOSE US SECTION ===== */}
-      <section className="py-20 lg:py-32">
+      <section className="py-20 lg:py-32 bg-muted">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <div className="inline-block border border-accent/40 px-4 py-1.5 mb-6">
@@ -395,41 +430,6 @@ export default function HomePage() {
                 </div>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== GALLERY SECTION ===== */}
-      <section className="py-20 lg:py-32 bg-muted">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <div className="inline-block border border-accent/40 px-4 py-1.5 mb-6">
-              <span className="text-xs font-mono tracking-widest text-accent uppercase">
-                Our Work
-              </span>
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-light mb-6 text-balance">
-              From our factory floor
-            </h2>
-            <p className="text-lg font-mono text-muted-foreground leading-relaxed">
-              A glimpse into our manufacturing process and the products we
-              create.
-            </p>
-          </div>
-
-          <HomeGallery />
-
-          <div className="text-center mt-12">
-            <Link href="/gallery">
-              <Button
-                size="lg"
-                variant="outline"
-                className="font-mono text-sm bg-transparent cursor-pointer"
-              >
-                View Full Gallery
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
           </div>
         </div>
       </section>
