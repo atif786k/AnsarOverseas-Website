@@ -1,21 +1,8 @@
-import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 
-export const metadata: Metadata = {
-  title: "About Us — Family-Owned Glass Factory Since Early 2000s",
-  description:
-    "Learn about M/S Ansar Overseas — a family-owned glass manufacturing unit in Firozabad (Glass City of India). 20+ years of experience, 50+ skilled craftsmen, serving exporters & bulk buyers in 25+ countries.",
-  alternates: {
-    canonical: "/about",
-  },
-  openGraph: {
-    title: "About Ansar Overseas — Glass Manufacturing Heritage from Firozabad",
-    description:
-      "Family-owned glass manufacturing unit in Firozabad, India. 20+ years supplying custom glass to exporters, lighting brands & home decor companies worldwide.",
-  },
-};
+import { buildMetadata } from "@/lib/seo";
 import {
   ArrowRight,
   Award,
@@ -26,6 +13,15 @@ import {
 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import Link from "next/link";
+
+export const metadata = buildMetadata({
+  title: "About Ansar Overseas | Glass Factory in Firozabad",
+  description:
+    "A family-owned glass manufacturing unit in Firozabad since the early 2000s, serving exporters, lighting brands and home decor companies worldwide.",
+  path: "/about",
+  image: "/og-about.jpg",
+  imageAlt: "The Ansar Overseas glass factory in Firozabad, India",
+});
 
 export default function AboutPage() {
   const values = [
@@ -151,7 +147,11 @@ export default function AboutPage() {
             <div className="relative">
               <img
                 src="/family-owned-glass-factory-workshop-heritage.jpg"
-                alt="Ansar Overseas workshop heritage"
+                alt="The Ansar Overseas glass workshop in Firozabad"
+                width={1024}
+                height={1024}
+                loading="lazy"
+                decoding="async"
                 className="w-full aspect-4/3 object-cover"
               />
               <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-primary/80 to-transparent p-6">

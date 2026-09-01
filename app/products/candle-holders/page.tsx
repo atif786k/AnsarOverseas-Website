@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -11,31 +10,16 @@ import {
   FAQJsonLd,
 } from "@/components/json-ld";
 import { FAQAccordion } from "@/components/faq-accordion";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title:
-    "Candle Holders & Votives — Glass Candle Holder Manufacturer India | Ansar Overseas",
+export const metadata = buildMetadata({
+  title: "Candle Holder Manufacturer India | Glass Votives",
   description:
-    "Leading candle holder manufacturer in India. We supply hurricane candle holders, votive glass containers, tealight holder cups, and decorative candle jars in bulk. Wholesale candle holders from Firozabad with custom finishes — frosted, colored, gold & silver rim. Export-quality glass for B2B buyers.",
-  alternates: {
-    canonical: "/products/candle-holders",
-  },
-  openGraph: {
-    title:
-      "Candle Holders & Votives — Glass Candle Holder Manufacturer India | Ansar Overseas",
-    description:
-      "Wholesale glass candle holders, hurricane holders, votive containers & tealight cups from Firozabad, India. Custom shapes, frosted finishes & bulk supply for B2B buyers worldwide.",
-    url: "/products/candle-holders",
-    images: [
-      {
-        url: "/product-candle-holders.png",
-        width: 1200,
-        height: 630,
-        alt: "Glass candle holders and votives manufactured by Ansar Overseas",
-      },
-    ],
-  },
-};
+    "Hurricane holders, votive containers, tealight cups and candle jars manufactured in Firozabad, India. Custom shapes, frosted finishes, bulk supply.",
+  path: "/products/candle-holders",
+  image: "/og-product-candle-holders.jpg",
+  imageAlt: "Glass candle holders and votives manufactured by Ansar Overseas",
+});
 
 const faqs = [
   {
@@ -149,7 +133,7 @@ export default function CandleHoldersPage() {
         description="Glass candle holders, hurricane holders, votives, and tealight containers manufactured in Firozabad, India for B2B buyers."
         category="Glass Candle Holders"
         url="/products/candle-holders"
-        image="/product-candle-holders.png"
+        image="/product-candle-holders.webp"
       />
       <BreadcrumbJsonLd
         items={[
@@ -227,10 +211,13 @@ export default function CandleHoldersPage() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             <div className="aspect-4/3 overflow-hidden">
               <img
-                src="/product-candle-holders.png"
+                src="/product-candle-holders.webp"
                 alt="Glass candle holders and votive containers manufactured by Ansar Overseas in Firozabad, India"
+                width={1400}
+                height={933}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
-                loading="eager"
               />
             </div>
             <div className="space-y-6">

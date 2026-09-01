@@ -1,15 +1,10 @@
-import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Gallery — Our Manufacturing Process & Products",
+export const metadata = buildMetadata({
+  title: "Gallery | Our Glass Factory & Finished Products",
   description:
-    "See our glass manufacturing process, factory floor, and finished products. Artisan glassblowing, quality inspection, and bulk production at our Firozabad facility.",
-  alternates: {
-    canonical: "/gallery",
-  },
-  openGraph: {
-    title: "Gallery — Ansar Overseas Glass Manufacturing",
-    description:
-      "A glimpse into our glass factory in Firozabad: craftsmanship, production line, quality control & finished products.",
-  },
-};
+    "See our glass manufacturing process in Firozabad: artisan glassblowing, the production line, quality inspection and finished glass products.",
+  path: "/gallery",
+  image: "/og-gallery.jpg",
+  imageAlt: "Finished glass products from the Ansar Overseas factory",
+});

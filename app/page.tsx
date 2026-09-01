@@ -1,20 +1,9 @@
-import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
-import {
-  OrganizationJsonLd,
-  LocalBusinessJsonLd,
-} from "@/components/json-ld";
+import { OrganizationJsonLd, LocalBusinessJsonLd } from "@/components/json-ld";
 
-export const metadata: Metadata = {
-  title: "Ansar Overseas | Custom Glass Manufacturer in Firozabad, India",
-  description:
-    "M/S Ansar Overseas manufactures custom glass products — lamp glass, candle holders, decorative glass, drinkware & more — for exporters, lighting brands & bulk buyers. Based in Firozabad, India. 20+ years experience.",
-  alternates: {
-    canonical: "/",
-  },
-};
+import { buildMetadata } from "@/lib/seo";
 import {
   ArrowRight,
   Factory,
@@ -34,8 +23,27 @@ import {
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import Link from "next/link";
 import { HomeGallery } from "@/components/home-gallery";
+import { fetchGalleryImages } from "@/lib/gallery";
 
-export default function HomePage() {
+export const metadata = buildMetadata({
+  title: "Custom Glass Manufacturer in Firozabad | Ansar Overseas",
+  description:
+    "Custom glass manufacturer in Firozabad, India. Lamp glass, candle holders, decorative glass and drinkware for exporters and bulk buyers worldwide.",
+  path: "/",
+});
+
+// Regenerated hourly so the gallery strip below stays current without making
+// the homepage dynamic.
+export const revalidate = 3600;
+
+export default async function HomePage() {
+  let galleryImages: { url: string; name: string }[] = [];
+  try {
+    galleryImages = (await fetchGalleryImages()).slice(0, 5);
+  } catch {
+    // Section hides itself if the blob store is unreachable (e.g. local dev).
+  }
+
   const stats = [
     { icon: Factory, value: "20+", label: "Years in Business" },
     { icon: Users, value: "50+", label: "Skilled Craftsmen" },
@@ -189,6 +197,10 @@ export default function HomePage() {
                 <img
                   src="/factory-hero-molten-glass.jpg"
                   alt="Craftsman holding molten glass at Ansar Overseas factory in Firozabad"
+                  width={720}
+                  height={1280}
+                  fetchPriority="high"
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -196,6 +208,9 @@ export default function HomePage() {
                 <img
                   src="/factory-hero-craftsmen.jpg"
                   alt="Glass factory craftsmen working with molten glass on rods"
+                  width={720}
+                  height={1280}
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -203,6 +218,9 @@ export default function HomePage() {
                 <img
                   src="/factory-hero-furnace.jpg"
                   alt="Artisans working near glass furnace with warm glow"
+                  width={960}
+                  height={1280}
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -245,12 +263,20 @@ export default function HomePage() {
             <div className="grid grid-cols-2 gap-4">
               <img
                 src="/family-owned-glass-factory-workshop-heritage.jpg"
-                alt="Ansar Overseas family-owned glass factory"
+                alt="Ansar Overseas family-owned glass factory in Firozabad"
+                width={1024}
+                height={1024}
+                loading="lazy"
+                decoding="async"
                 className="w-full aspect-3/4 object-cover"
               />
               <img
                 src="/glass-factory-team-working-together.jpg"
-                alt="Our team working together"
+                alt="The Ansar Overseas team working together on the factory floor"
+                width={1024}
+                height={1024}
+                loading="lazy"
+                decoding="async"
                 className="w-full aspect-3/4 object-cover mt-8"
               />
             </div>
@@ -265,7 +291,9 @@ export default function HomePage() {
               </h2>
               <div className="space-y-4 text-base font-mono text-muted-foreground leading-relaxed">
                 <p>
-                  <strong className="text-foreground">M/S Ansar Overseas</strong>{" "}
+                  <strong className="text-foreground">
+                    M/S Ansar Overseas
+                  </strong>{" "}
                   is a family-owned glass manufacturing unit based in{" "}
                   <strong className="text-foreground">Firozabad</strong> — the
                   Glass City of India. We have been manufacturing and supplying
@@ -283,8 +311,8 @@ export default function HomePage() {
                     lighting brands, handicraft exporters, and home decor
                     companies
                   </strong>
-                  , while also supplying drinkware, bottles, jars, and containers
-                  to retail and wholesale buyers.
+                  , while also supplying drinkware, bottles, jars, and
+                  containers to retail and wholesale buyers.
                 </p>
               </div>
               <Link href="/about">
@@ -302,39 +330,41 @@ export default function HomePage() {
       </section>
 
       {/* ===== GALLERY SECTION ===== */}
-      <section className="py-20 lg:py-32 bg-muted">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <div className="inline-block border border-accent/40 px-4 py-1.5 mb-6">
-              <span className="text-xs font-mono tracking-widest text-accent uppercase">
-                Our Work
-              </span>
+      {galleryImages.length > 0 && (
+        <section className="py-20 lg:py-32 bg-muted">
+          <div className="container mx-auto px-4 lg:px-8">
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <div className="inline-block border border-accent/40 px-4 py-1.5 mb-6">
+                <span className="text-xs font-mono tracking-widest text-accent uppercase">
+                  Our Work
+                </span>
+              </div>
+              <h2 className="text-4xl lg:text-5xl font-light mb-6 text-balance">
+                From our factory floor
+              </h2>
+              <p className="text-lg font-mono text-muted-foreground leading-relaxed">
+                A glimpse into our manufacturing process and the products we
+                create.
+              </p>
             </div>
-            <h2 className="text-4xl lg:text-5xl font-light mb-6 text-balance">
-              From our factory floor
-            </h2>
-            <p className="text-lg font-mono text-muted-foreground leading-relaxed">
-              A glimpse into our manufacturing process and the products we
-              create.
-            </p>
-          </div>
 
-          <HomeGallery />
+            <HomeGallery images={galleryImages} />
 
-          <div className="text-center mt-12">
-            <Link href="/gallery">
-              <Button
-                size="lg"
-                variant="outline"
-                className="font-mono text-sm bg-transparent cursor-pointer"
-              >
-                View Full Gallery
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
+            <div className="text-center mt-12">
+              <Link href="/gallery">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="font-mono text-sm bg-transparent cursor-pointer"
+                >
+                  View Full Gallery
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ===== PRODUCTS / CAPABILITIES SECTION ===== */}
       <section className="py-20 lg:py-32">

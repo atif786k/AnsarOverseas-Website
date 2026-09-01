@@ -8,7 +8,9 @@ import { fetchGalleryImages } from "@/lib/gallery";
 import { GalleryClient } from "./gallery-client";
 import { ImageGalleryJsonLd } from "@/components/json-ld";
 
-export const dynamic = "force-dynamic";
+// Revalidated hourly, and on demand whenever the admin uploads, edits or
+// deletes an image (see app/api/gallery/*).
+export const revalidate = 3600;
 
 export default async function GalleryPage() {
   let images: Awaited<ReturnType<typeof fetchGalleryImages>> = [];

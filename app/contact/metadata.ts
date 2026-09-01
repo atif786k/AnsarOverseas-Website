@@ -1,15 +1,10 @@
-import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact Us — Request a Quote or Discuss Your Requirements",
+export const metadata = buildMetadata({
+  title: "Contact Ansar Overseas | Request a Glass Quote",
   description:
-    "Contact M/S Ansar Overseas for custom glass manufacturing quotes, bulk order pricing, or product inquiries. WhatsApp: +91 7727075499. Located in Firozabad, UP, India.",
-  alternates: {
-    canonical: "/contact",
-  },
-  openGraph: {
-    title: "Contact Ansar Overseas — Custom Glass Manufacturing Partner",
-    description:
-      "Get in touch for custom quotes, bulk pricing, or product inquiries. Phone & WhatsApp: +91 7727075499. Firozabad, India.",
-  },
-};
+    "Request a quote for custom glass manufacturing or bulk orders. WhatsApp +91 7727075499 or email msansaroverseas@gmail.com. Firozabad, UP, India.",
+  path: "/contact",
+  image: "/og-contact.jpg",
+  imageAlt: "The Ansar Overseas team at the glass factory in Firozabad",
+});

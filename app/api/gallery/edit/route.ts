@@ -1,4 +1,5 @@
 import { put, del, list } from "@vercel/blob";
+import { revalidateGallery } from "@/lib/gallery";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(request: NextRequest) {
@@ -51,6 +52,8 @@ export async function PUT(request: NextRequest) {
       contentType: "application/json",
       addRandomSuffix: false,
     });
+
+    revalidateGallery();
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

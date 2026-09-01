@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -11,23 +10,16 @@ import {
   FAQJsonLd,
 } from "@/components/json-ld";
 import { FAQAccordion } from "@/components/faq-accordion";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title:
-    "Decorative Glass & Handicraft Components — Glass Supplier India | Ansar Overseas",
+export const metadata = buildMetadata({
+  title: "Decorative Glass Supplier India | Handicraft Parts",
   description:
-    "Leading decorative glass supplier in India. Glass inserts for handicrafts, lantern glass panels, terrarium glass manufacturer, decorative bowls & platters. Custom shapes & finishes from Firozabad. MOQ 300 pieces.",
-  alternates: {
-    canonical: "/products/decorative-glass",
-  },
-  openGraph: {
-    title:
-      "Decorative Glass & Handicraft Components — Glass Supplier India | Ansar Overseas",
-    description:
-      "Decorative glass supplier from Firozabad, India. Glass inserts for metal decor, lantern panels, terrarium containers, handicraft components. Custom manufacturing for exporters & home decor brands.",
-    images: ["/product-decorative-glass.png"],
-  },
-};
+    "Glass inserts for metal decor, lantern panels, terrarium containers and decorative components for handicraft exporters and home decor brands.",
+  path: "/products/decorative-glass",
+  image: "/og-product-decorative-glass.jpg",
+  imageAlt: "Decorative glass and handicraft components by Ansar Overseas",
+});
 
 const faqs = [
   {
@@ -162,7 +154,7 @@ export default function DecorativeGlassPage() {
         description="Premium decorative glass products including glass inserts for metal decor, lantern glass panels, terrarium containers, decorative bowls, and handicraft components. Custom shapes and finishes manufactured in Firozabad, India."
         category="Decorative Glass"
         url="/products/decorative-glass"
-        image="/product-decorative-glass.png"
+        image="/product-decorative-glass.webp"
       />
       <BreadcrumbJsonLd
         items={[
@@ -238,8 +230,12 @@ export default function DecorativeGlassPage() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             <div className="aspect-4/3 overflow-hidden">
               <img
-                src="/product-decorative-glass.png"
+                src="/product-decorative-glass.webp"
                 alt="Decorative glass products — inserts, lantern panels, terrarium containers and handicraft components by Ansar Overseas"
+                width={1400}
+                height={933}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
               />
             </div>

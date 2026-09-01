@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -11,23 +10,16 @@ import {
   FAQJsonLd,
 } from "@/components/json-ld";
 import { FAQAccordion } from "@/components/faq-accordion";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title:
-    "Custom Glass Manufacturing — OEM Glass Components Manufacturer India | Ansar Overseas",
+export const metadata = buildMetadata({
+  title: "Custom Glass Manufacturer India | OEM Components",
   description:
-    "Custom glass manufacturer in Firozabad, India. OEM glass components, bespoke glass products, glass prototype development & custom glass manufacturing from technical drawings. MOQ 200 pieces.",
-  alternates: {
-    canonical: "/products/custom-glass",
-  },
-  openGraph: {
-    title:
-      "Custom Glass Manufacturing — OEM Glass Components Manufacturer India | Ansar Overseas",
-    description:
-      "OEM custom glass components manufacturer in Firozabad, India. Bespoke glass products from technical drawings — prototype development, custom shapes, finishes & branding for manufacturers and brands worldwide.",
-    images: ["/product-custom-glass.png"],
-  },
-};
+    "OEM glass components made to your drawings: custom shapes, sizes, finishes, logo etching and packaging. Prototypes approved before production.",
+  path: "/products/custom-glass",
+  image: "/og-product-custom-glass.jpg",
+  imageAlt: "Custom OEM glass components manufactured by Ansar Overseas",
+});
 
 const faqs = [
   {
@@ -185,7 +177,7 @@ export default function CustomGlassPage() {
         description="OEM custom glass components manufactured from technical drawings and specifications. Prototype development, custom shapes, finishes, branding, and packaging from Firozabad, India."
         category="Custom Glass Components"
         url="/products/custom-glass"
-        image="/product-custom-glass.png"
+        image="/product-custom-glass.webp"
       />
       <BreadcrumbJsonLd
         items={[
@@ -260,8 +252,12 @@ export default function CustomGlassPage() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             <div className="aspect-4/3 overflow-hidden">
               <img
-                src="/product-custom-glass.png"
+                src="/product-custom-glass.webp"
                 alt="Custom glass manufacturing — OEM glass components, bespoke shapes and finishes by Ansar Overseas, Firozabad, India"
+                width={1400}
+                height={933}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
               />
             </div>

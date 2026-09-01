@@ -99,11 +99,9 @@ export function LocalBusinessJsonLd() {
       opens: "10:00",
       closes: "18:00",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.8",
-      reviewCount: "120",
-    },
+    // No aggregateRating: Google requires ratings to come from real users and
+    // to be visible on the page carrying the markup. Add it back only once
+    // genuine reviews are published on the site.
   };
 
   return (

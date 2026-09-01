@@ -53,7 +53,10 @@ export function GalleryClient({ images }: { images: GalleryImage[] }) {
             <img
               src={item.url}
               alt={item.name}
-              loading={index < 6 ? undefined : "lazy"}
+              width={800}
+              height={800}
+              loading={index < 3 ? "eager" : "lazy"}
+              decoding="async"
               className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
             />
 
