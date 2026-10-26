@@ -5,7 +5,7 @@ export function OrganizationJsonLd() {
     name: "M/S Ansar Overseas",
     alternateName: "Ansar Overseas",
     url: "https://ansar-overseas-website.vercel.app",
-    logo: "https://ansar-overseas-website.vercel.app/icon.svg",
+    logo: "https://ansar-overseas-website.vercel.app/logo-horizontal.png",
     description:
       "Custom glass manufacturer in Firozabad, India supplying lamp glass, candle holders, decorative glass, drinkware & custom glass components to exporters, lighting brands & bulk buyers worldwide.",
     foundingDate: "2000",

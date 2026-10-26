@@ -43,9 +43,15 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Company Info */}
           <div>
-            <div className="text-2xl font-light tracking-wider mb-6">
-              ANSAR<span className="font-semibold">OVERSEAS</span>
-            </div>
+            {/* Reversed lockup: the footer sits on bg-primary. */}
+            <img
+              src="/logo-stacked-light.png"
+              alt="Ansar Overseas"
+              width={296}
+              height={121}
+              loading="lazy"
+              className="h-16 w-auto mb-6"
+            />
             <p className="text-sm font-mono text-primary-foreground/70 leading-relaxed mb-4">
               Custom glass manufacturing from Firozabad, India. Serving
               exporters, lighting brands, and home decor companies since the

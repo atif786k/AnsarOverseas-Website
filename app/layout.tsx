@@ -45,20 +45,22 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteUrl,
   },
+  // ?v=2 busts the browser cache, which would otherwise keep serving the
+  // previous "AO" icon to returning visitors.
   icons: {
     icon: [
       {
-        url: "/icon-32x32.png",
+        url: "/icon-32x32.png?v=2",
         sizes: "32x32",
         type: "image/png",
       },
       {
-        url: "/favicon.png",
-        sizes: "any",
+        url: "/favicon.png?v=2",
+        sizes: "192x192",
         type: "image/png",
       },
     ],
-    apple: "/apple-icon.png",
+    apple: "/apple-icon.png?v=2",
   },
   manifest: "/manifest.json",
   openGraph: {

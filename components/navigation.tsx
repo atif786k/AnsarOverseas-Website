@@ -22,10 +22,25 @@ export function Navigation() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-light tracking-wider">
-              ANSAR<span className="font-semibold">OVERSEAS</span>
-            </div>
+          <Link href="/" className="flex items-center">
+            {/* Full lockup from sm up; the mark alone on phones, where the
+                wordmark would crowd the menu button. */}
+            <img
+              src="/logo-horizontal.png"
+              alt="Ansar Overseas"
+              width={323}
+              height={100}
+              fetchPriority="high"
+              className="hidden sm:block h-11 w-auto"
+            />
+            <img
+              src="/logo-mark.png"
+              alt="Ansar Overseas"
+              width={103}
+              height={96}
+              fetchPriority="high"
+              className="sm:hidden h-9 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
