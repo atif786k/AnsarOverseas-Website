@@ -45,22 +45,38 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteUrl,
   },
-  // ?v=2 busts the browser cache, which would otherwise keep serving the
-  // previous "AO" icon to returning visitors.
+  // Transparent marks, so the icon sits on the tab strip rather than in a
+  // tile. The artwork has to invert with the strip: the dark mark is the
+  // default because most people browse in light mode, and the reversed mark
+  // is served to dark schemes where it is supported. ?v=3 busts the browser
+  // cache, which would otherwise keep serving the previous "AO" icon.
   icons: {
     icon: [
       {
-        url: "/icon-32x32.png?v=2",
+        url: "/icon-32x32.png?v=3",
         sizes: "32x32",
         type: "image/png",
       },
       {
-        url: "/favicon.png?v=2",
+        url: "/icon-32x32-on-dark.png?v=3",
+        sizes: "32x32",
+        type: "image/png",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/favicon.png?v=3",
         sizes: "192x192",
         type: "image/png",
       },
+      {
+        url: "/favicon-on-dark.png?v=3",
+        sizes: "192x192",
+        type: "image/png",
+        media: "(prefers-color-scheme: dark)",
+      },
     ],
-    apple: "/apple-icon.png?v=2",
+    // Left opaque: iOS composites transparent home-screen icons onto black.
+    apple: "/apple-icon.png?v=3",
   },
   manifest: "/manifest.json",
   openGraph: {

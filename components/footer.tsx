@@ -45,12 +45,12 @@ export function Footer() {
           <div>
             {/* Reversed lockup: the footer sits on bg-primary. */}
             <img
-              src="/logo-stacked-light.png"
+              src="/logo-horizontal-light.png"
               alt="Ansar Overseas"
-              width={296}
-              height={121}
+              width={265}
+              height={81}
               loading="lazy"
-              className="h-16 w-auto mb-6"
+              className="h-14 w-auto mb-6"
             />
             <p className="text-sm font-mono text-primary-foreground/70 leading-relaxed mb-4">
               Custom glass manufacturing from Firozabad, India. Serving
