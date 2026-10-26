@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -22,19 +23,15 @@ export async function generateMetadata({
   const post = getBlogPost(slug);
   if (!post) return {};
 
-  return {
-    title: `${post.title} | Ansar Overseas Blog`,
-    description: post.description,
-    alternates: {
-      canonical: `/blog/${post.slug}`,
-    },
-    openGraph: {
-      title: post.title,
-      description: post.description,
-      type: "article",
-      publishedTime: post.date,
-    },
-  };
+  return buildMetadata({
+    title: post.seoTitle,
+    description: post.seoDescription,
+    path: `/blog/${post.slug}`,
+    image: "/og-blog.jpg",
+    imageAlt: "Quality inspection at the Ansar Overseas glass factory",
+    type: "article",
+    publishedTime: post.date,
+  });
 }
 
 export default async function BlogPostPage({

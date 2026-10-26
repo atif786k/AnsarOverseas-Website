@@ -1,4 +1,5 @@
 import { put } from "@vercel/blob";
+import { revalidateGallery } from "@/lib/gallery";
 import { NextRequest, NextResponse } from "next/server";
 import sharp from "sharp";
 
@@ -69,6 +70,8 @@ export async function POST(request: NextRequest) {
       contentType: "application/json",
       addRandomSuffix: false,
     });
+
+    revalidateGallery();
 
     return NextResponse.json({
       url: blob.url,

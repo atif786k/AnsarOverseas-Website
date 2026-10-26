@@ -2,6 +2,10 @@ export interface BlogPost {
   slug: string;
   title: string;
   description: string;
+  /** Shorter title for the <title> tag — keep to 60 characters or fewer. */
+  seoTitle: string;
+  /** Shorter description for the meta tag — keep to 155 characters or fewer. */
+  seoDescription: string;
   date: string;
   readTime: string;
   category: string;
@@ -11,6 +15,9 @@ export interface BlogPost {
 export const blogPosts: BlogPost[] = [
   {
     slug: "glass-manufacturing-in-firozabad",
+    seoTitle: "Why Firozabad Is India's Glass Manufacturing Hub",
+    seoDescription:
+      "Why Firozabad, India's Glass City, is the sourcing destination for B2B glass buyers: its history, capabilities, pricing and export experience.",
     title: "Glass Manufacturing in Firozabad: Why It Matters for B2B Buyers",
     description:
       "Discover why Firozabad — India's Glass City — is the preferred sourcing destination for glass products. Learn about the industry's history, capabilities, and advantages for B2B buyers.",
@@ -42,6 +49,9 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "how-to-choose-glass-manufacturer-india",
+    seoTitle: "How to Choose a Glass Manufacturer in India",
+    seoDescription:
+      "A practical guide to picking a glass manufacturer in India: quality checks, MOQ, pricing, custom capability and export track record.",
     title: "How to Choose a Glass Manufacturer in India: A Buyer's Guide",
     description:
       "A practical guide for B2B buyers on selecting the right glass manufacturer in India. Covers quality checks, MOQ, pricing, custom capabilities, and what to look for in a manufacturing partner.",
@@ -75,6 +85,9 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "custom-vs-standard-glass-products",
+    seoTitle: "Custom vs Standard Glass Products: Which to Choose",
+    seoDescription:
+      "Custom or standard glass products? Compare cost, lead time, MOQ and tooling costs to work out which option fits your business.",
     title:
       "Custom vs Standard Glass Products: What's Right for Your Business?",
     description:

@@ -1,4 +1,5 @@
 import { del } from "@vercel/blob";
+import { revalidateGallery } from "@/lib/gallery";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -26,6 +27,8 @@ export async function POST(request: NextRequest) {
     });
 
     await del(allUrls);
+
+    revalidateGallery();
 
     return NextResponse.json({ success: true, deleted: urls.length });
   } catch (error) {

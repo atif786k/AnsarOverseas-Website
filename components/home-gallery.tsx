@@ -1,26 +1,14 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
 interface GalleryImage {
   url: string;
   name: string;
 }
 
-export function HomeGallery() {
-  const [images, setImages] = useState<GalleryImage[]>([]);
-
-  useEffect(() => {
-    fetch("/api/gallery/list")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.images && data.images.length > 0) {
-          setImages(data.images.slice(0, 5));
-        }
-      })
-      .catch(() => {});
-  }, []);
-
+/**
+ * Server-rendered so the images are in the initial HTML. The previous version
+ * fetched /api/gallery/list from the browser, which robots.txt disallows —
+ * leaving this section empty for every crawler.
+ */
+export function HomeGallery({ images }: { images: GalleryImage[] }) {
   if (images.length === 0) return null;
 
   return (
@@ -29,15 +17,16 @@ export function HomeGallery() {
         <div
           key={img.url}
           className={`overflow-hidden group ${
-            index === 0 || index === 5
-              ? "md:col-span-2 md:row-span-2"
-              : ""
+            index === 0 || index === 5 ? "md:col-span-2 md:row-span-2" : ""
           }`}
         >
           <img
             src={img.url}
             alt={img.name}
-            loading="lazy"
+            width={800}
+            height={800}
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
             className="w-full h-full object-contain aspect-square group-hover:scale-105 transition-transform duration-500 bg-muted"
           />
         </div>

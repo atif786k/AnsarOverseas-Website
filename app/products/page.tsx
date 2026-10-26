@@ -1,21 +1,8 @@
-import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 
-export const metadata: Metadata = {
-  title: "Glass Products — Lamp Glass, Candle Holders, Decorative Glass & More",
-  description:
-    "Explore our range of glass products: lamp glass & lighting components, candle holders & votives, decorative glass, drinkware, containers & custom glass manufacturing. Bulk orders welcome.",
-  alternates: {
-    canonical: "/products",
-  },
-  openGraph: {
-    title: "Glass Products — Lamp Glass, Candle Holders, Decorative Glass & Custom Components",
-    description:
-      "Full range of B2B glass products: lighting components, candle holders, decorative glass, drinkware & custom manufacturing from Firozabad, India.",
-  },
-};
+import { buildMetadata } from "@/lib/seo";
 import {
   ArrowRight,
   Lamp,
@@ -27,6 +14,15 @@ import {
 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/whatsapp-icon";
 import Link from "next/link";
+
+export const metadata = buildMetadata({
+  title: "Glass Products: Lamp Glass, Candle Holders & Drinkware",
+  description:
+    "Lamp glass, candle holders, decorative glass, drinkware and custom glass components manufactured in Firozabad, India for bulk and export orders.",
+  path: "/products",
+  image: "/og-products.jpg",
+  imageAlt: "Bulk glass manufacturing production line at Ansar Overseas",
+});
 
 export default function ProductsPage() {
   const categories = [
@@ -45,7 +41,7 @@ export default function ProductsPage() {
       ],
       useCases:
         "Ideal for lighting manufacturers, chandelier brands, and OEM lighting suppliers looking for reliable custom glass components.",
-      image: "/product-lamp-glass.png",
+      image: "/product-lamp-glass.webp",
       href: "/products/lamp-glass",
     },
     {
@@ -63,7 +59,7 @@ export default function ProductsPage() {
       ],
       useCases:
         "Perfect for home decor brands, candle companies, gift exporters, and retail chains looking for quality candle glassware.",
-      image: "/product-candle-holders.png",
+      image: "/product-candle-holders.webp",
       href: "/products/candle-holders",
     },
     {
@@ -81,7 +77,7 @@ export default function ProductsPage() {
       ],
       useCases:
         "Designed for handicraft exporters, home decor brands, interior designers, and furniture accessory makers.",
-      image: "/product-decorative-glass.png",
+      image: "/product-decorative-glass.webp",
       href: "/products/decorative-glass",
     },
     {
@@ -99,7 +95,7 @@ export default function ProductsPage() {
       ],
       useCases:
         "Suitable for HORECA suppliers, retail brands, wholesale distributors, and beverage companies needing consistent bulk supply.",
-      image: "/product-drinkware.png",
+      image: "/product-drinkware.webp",
       href: "/products/drinkware",
     },
     {
@@ -117,7 +113,7 @@ export default function ProductsPage() {
       ],
       useCases:
         "For OEM manufacturers, product designers, startups, and any business with unique glass requirements.",
-      image: "/product-custom-glass.png",
+      image: "/product-custom-glass.webp",
       href: "/products/custom-glass",
     },
   ];
@@ -206,7 +202,12 @@ export default function ProductsPage() {
                   >
                     <img
                       src={category.image}
-                      alt={category.title}
+                      alt={`${category.title} manufactured by Ansar Overseas`}
+                      width={1400}
+                      height={933}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                      fetchPriority={index === 0 ? "high" : "auto"}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                     />
                   </Link>
@@ -261,7 +262,11 @@ export default function ProductsPage() {
             <div className="aspect-4/3 overflow-hidden">
               <img
                 src="/glass-manufacturing-factory-production-line-bulk-o.jpg"
-                alt="Bulk glass manufacturing production line"
+                alt="Bulk glass manufacturing production line at Ansar Overseas"
+                width={1024}
+                height={1024}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
               />
             </div>

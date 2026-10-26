@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -11,23 +10,16 @@ import {
   FAQJsonLd,
 } from "@/components/json-ld";
 import { FAQAccordion } from "@/components/faq-accordion";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title:
-    "Drinkware, Bottles & Containers — Bulk Glass Manufacturer India | Ansar Overseas",
+export const metadata = buildMetadata({
+  title: "Bulk Drinkware Manufacturer India | Bottles & Jars",
   description:
-    "Bulk drinking glasses manufacturer in India. Mason jar manufacturer, wholesale drinkware supplier, glass bottles manufacturer, glass containers wholesale. Custom drinkware from Firozabad. MOQ 1000 pieces.",
-  alternates: {
-    canonical: "/products/drinkware",
-  },
-  openGraph: {
-    title:
-      "Drinkware, Bottles & Containers — Bulk Glass Manufacturer India | Ansar Overseas",
-    description:
-      "Bulk glass drinkware manufacturer from Firozabad, India. Drinking glasses, tumblers, bottles, mason jars, storage containers. Wholesale supply for HORECA, retail brands, and distributors.",
-    images: ["/product-drinkware.png"],
-  },
-};
+    "Drinking glasses, tumblers, bottles, mugs and storage jars manufactured in Firozabad for HORECA suppliers, retail brands and wholesale buyers.",
+  path: "/products/drinkware",
+  image: "/og-product-drinkware.jpg",
+  imageAlt: "Glass drinkware, bottles and containers by Ansar Overseas",
+});
 
 const faqs = [
   {
@@ -163,7 +155,7 @@ export default function DrinkwarePage() {
         description="Bulk glass drinkware manufacturer in India. Drinking glasses, tumblers, beverage bottles, mason jars, storage containers, oil and vinegar bottles. Custom finishes and branding for HORECA, retail, and wholesale buyers. Manufactured in Firozabad."
         category="Glass Drinkware"
         url="/products/drinkware"
-        image="/product-drinkware.png"
+        image="/product-drinkware.webp"
       />
       <BreadcrumbJsonLd
         items={[
@@ -239,8 +231,12 @@ export default function DrinkwarePage() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             <div className="aspect-4/3 overflow-hidden">
               <img
-                src="/product-drinkware.png"
+                src="/product-drinkware.webp"
                 alt="Glass drinkware, bottles and containers — tumblers, mason jars, beverage bottles and storage containers by Ansar Overseas"
+                width={1400}
+                height={933}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
               />
             </div>

@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Poppins, Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { ScrollToTop } from "@/components/scroll-to-top"
+import { SITE_URL } from "@/lib/seo"
 import "./globals.css"
 
 const poppins = Poppins({
@@ -16,16 +17,16 @@ const inter = Inter({
   variable: "--font-mono",
 })
 
-const siteUrl = "https://ansar-overseas-website.vercel.app"
+const siteUrl = SITE_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Ansar Overseas | Custom Glass Manufacturer in Firozabad, India",
+    default: "Custom Glass Manufacturer in Firozabad | Ansar Overseas",
     template: "%s | Ansar Overseas",
   },
   description:
-    "M/S Ansar Overseas — Custom glass manufacturer in Firozabad, India. We supply lamp glass, candle holders, decorative glass, drinkware & custom glass components to exporters, lighting brands & bulk buyers worldwide. 20+ years experience.",
+    "Custom glass manufacturer in Firozabad, India. Lamp glass, candle holders, decorative glass and drinkware for exporters and bulk buyers worldwide.",
   keywords:
     "glass manufacturer India, custom glass manufacturing, lamp glass supplier, candle holder manufacturer, decorative glass Firozabad, glass exporter India, bulk glass orders, lighting glass components, chandelier glass parts, handicraft glass supplier, glass factory Firozabad, B2B glass supplier, Ansar Overseas, glass city India, Firozabad glass factory",
   authors: [{ name: "M/S Ansar Overseas" }],
@@ -80,28 +81,28 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   openGraph: {
-    title: "Ansar Overseas | Custom Glass Manufacturer in Firozabad, India",
+    title: "Custom Glass Manufacturer in Firozabad | Ansar Overseas",
     description:
-      "Custom glass manufacturer supplying lamp glass, candle holders, decorative glass & drinkware to exporters and bulk buyers worldwide. 20+ years in business.",
+      "Custom glass manufacturer supplying lamp glass, candle holders, decorative glass & drinkware to exporters and bulk buyers worldwide.",
     url: siteUrl,
     type: "website",
     locale: "en_IN",
     siteName: "Ansar Overseas",
     images: [
       {
-        url: "/artisan-glassblowing-in-factory-with-molten-glass.jpg",
+        url: "/og-default.jpg",
         width: 1200,
         height: 630,
-        alt: "Ansar Overseas — Custom Glass Manufacturing in Firozabad, India",
+        alt: "Ansar Overseas — custom glass manufacturing in Firozabad, India",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ansar Overseas | Custom Glass Manufacturer — Firozabad, India",
+    title: "Custom Glass Manufacturer in Firozabad | Ansar Overseas",
     description:
       "Custom glass manufacturer supplying lamp glass, candle holders, decorative glass & drinkware to exporters and bulk buyers worldwide.",
-    images: ["/artisan-glassblowing-in-factory-with-molten-glass.jpg"],
+    images: ["/og-default.jpg"],
   },
   verification: {
     // Add your Google Search Console verification code here:

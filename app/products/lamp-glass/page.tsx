@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -11,22 +10,16 @@ import {
   FAQJsonLd,
 } from "@/components/json-ld";
 import { FAQAccordion } from "@/components/faq-accordion";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title:
-    "Lamp Glass & Lighting Components — Custom Glass Manufacturer India | Ansar Overseas",
+export const metadata = buildMetadata({
+  title: "Lamp Glass Manufacturer India | Lighting Components",
   description:
-    "Leading lamp glass manufacturer in Firozabad, India. Custom chandelier glass parts, pendant light diffusers, lamp chimneys, wall sconce covers & decorative lighting glass supplier for bulk and export orders.",
-  alternates: {
-    canonical: "/products/lamp-glass",
-  },
-  openGraph: {
-    title:
-      "Lamp Glass & Lighting Components — Custom Glass Manufacturer India | Ansar Overseas",
-    description:
-      "Custom lamp glass, chandelier parts, pendant diffusers and lighting glass components manufactured in Firozabad, India. Bulk orders and export supply.",
-  },
-};
+    "Custom lamp glass from Firozabad: chimneys, chandelier parts, pendant diffusers and sconce covers. MOQ 500 pieces, 2-3 week lead times.",
+  path: "/products/lamp-glass",
+  image: "/og-product-lamp-glass.jpg",
+  imageAlt: "Lamp glass and lighting components manufactured by Ansar Overseas",
+});
 
 const faqs = [
   {
@@ -137,7 +130,7 @@ export default function LampGlassPage() {
         description="Custom lamp glass, chandelier parts, pendant diffusers and lighting glass components manufactured in Firozabad, India."
         category="Glass Lighting Components"
         url="/products/lamp-glass"
-        image="/product-lamp-glass.png"
+        image="/product-lamp-glass.webp"
       />
       <BreadcrumbJsonLd
         items={[
@@ -214,8 +207,12 @@ export default function LampGlassPage() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             <div className="aspect-4/3 overflow-hidden">
               <img
-                src="/product-lamp-glass.png"
+                src="/product-lamp-glass.webp"
                 alt="Lamp glass and lighting components manufactured by Ansar Overseas in Firozabad, India — including lamp chimneys, chandelier parts, and pendant diffusers"
+                width={1376}
+                height={768}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
               />
             </div>

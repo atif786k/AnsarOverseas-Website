@@ -1,24 +1,18 @@
-import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { blogPosts } from "@/lib/blog";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title:
-    "Blog — Glass Manufacturing Insights & Buyer Guides | Ansar Overseas",
+export const metadata = buildMetadata({
+  title: "Glass Manufacturing Insights & Buyer Guides",
   description:
-    "Industry insights, buyer guides, and expert articles on glass manufacturing in India. Learn about sourcing glass products, custom manufacturing, and Firozabad's glass industry.",
-  alternates: {
-    canonical: "/blog",
-  },
-  openGraph: {
-    title: "Blog — Glass Manufacturing Insights | Ansar Overseas",
-    description:
-      "Expert articles on glass manufacturing, sourcing, and industry trends from Firozabad, India.",
-  },
-};
+    "Sourcing guides for B2B glass buyers: choosing a manufacturer in India, custom vs standard products, and why Firozabad leads the glass industry.",
+  path: "/blog",
+  image: "/og-blog.jpg",
+  imageAlt: "Quality inspection at the Ansar Overseas glass factory",
+});
 
 export default function BlogPage() {
   return (

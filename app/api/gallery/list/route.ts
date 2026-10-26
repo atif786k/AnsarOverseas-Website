@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const images = await fetchGalleryImages();
+    const images = await fetchGalleryImages({ fresh: true });
     return NextResponse.json({ images });
   } catch (error) {
     console.error("List error:", error);

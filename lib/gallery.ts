@@ -1,4 +1,5 @@
 import { list } from "@vercel/blob";
+import { revalidatePath } from "next/cache";
 
 export interface GalleryImage {
   url: string;
@@ -10,7 +11,16 @@ export interface GalleryImage {
   size: number;
 }
 
-export async function fetchGalleryImages(): Promise<GalleryImage[]> {
+/**
+ * Reads the gallery from blob storage.
+ *
+ * Public pages call this behind ISR, so the per-image metadata JSON is fetched
+ * with a one-hour cache. The admin screen passes `fresh: true` to bypass that
+ * and always see its own edits immediately.
+ */
+export async function fetchGalleryImages({
+  fresh = false,
+}: { fresh?: boolean } = {}): Promise<GalleryImage[]> {
   const { blobs } = await list({ prefix: "gallery/" });
 
   const imageBlobs = blobs.filter((b) => b.pathname.endsWith(".jpg"));
@@ -33,7 +43,10 @@ export async function fetchGalleryImages(): Promise<GalleryImage[]> {
 
       if (metaUrl) {
         try {
-          const res = await fetch(metaUrl, { cache: "no-store" });
+          const res = await fetch(
+            metaUrl,
+            fresh ? { cache: "no-store" } : { next: { revalidate: 3600 } },
+          );
           const meta = await res.json();
           name = meta.name || "";
           category = meta.category || "Gallery";
@@ -58,13 +71,23 @@ export async function fetchGalleryImages(): Promise<GalleryImage[]> {
         uploadedAt: blob.uploadedAt.toISOString(),
         size: blob.size,
       };
-    })
+    }),
   );
 
   images.sort(
     (a, b) =>
-      new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
+      new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime(),
   );
 
   return images;
+}
+
+/**
+ * Rebuilds the pages that render gallery images, so admin changes appear
+ * immediately instead of waiting out the hourly revalidation.
+ */
+export function revalidateGallery(): void {
+  revalidatePath("/gallery");
+  revalidatePath("/");
+  revalidatePath("/gallery-sitemap.xml");
 }
